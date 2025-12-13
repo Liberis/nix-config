@@ -1,0 +1,380 @@
+#!/bin/sh
+# ============================================
+# RIVER WM - CLEAN CONFIG WITH WIDERIVER
+# ============================================
+
+# COLOR SCHEME (Solarized Dark)
+# ============================================
+BASE03="0x002b36"
+BASE01="0x586e75"
+BASE1="0x93a1a1"
+RED="0xdc322f"
+
+# BASIC SETTINGS
+# ============================================
+riverctl focus-follows-cursor normal
+riverctl set-repeat 50 300
+riverctl background-color $BASE03
+riverctl xcursor-theme Bibata-Modern-Ice 24
+
+# Cursor follows focus
+riverctl set-cursor-warp on-focus-change  # cursor moves when switching windows
+riverctl set-cursor-warp on-output-change # cursor moves when switching monitors
+
+# BORDERS
+# ============================================
+riverctl border-width 2
+riverctl border-color-focused $BASE1
+riverctl border-color-unfocused $BASE01
+riverctl border-color-urgent $RED
+
+# LAYOUT MANAGER - WIDERIVER
+# ============================================
+riverctl default-layout wideriver
+
+# Kill any existing wideriver process first
+pkill -x wideriver 2>/dev/null || true
+sleep 0.2
+
+# Start wideriver in background with output logging
+# Use setsid to detach from shell session
+mkdir -p "$HOME/.local/state/river"
+setsid -f wideriver \
+  --layout left \
+  --layout-alt monocle \
+  --ratio-master 0.50 \
+  --count-master 1 \
+  --inner-gaps 0 \
+  --outer-gaps 0 \
+  --border-width 2 \
+  --border-width-monocle 0 \
+  --border-color-focused $BASE1 \
+  --border-color-unfocused $BASE01 \
+  --smart-gaps \
+  > "$HOME/.local/state/river/wideriver.log" 2>&1
+
+# Wait for wideriver to be ready
+sleep 1
+
+# Seed per-tag layouts (wideriver remembers per tag)
+riverctl set-focused-tags $((1 << 0))  # tag 1: term
+riverctl send-layout-cmd wideriver "--layout left"
+
+riverctl set-focused-tags $((1 << 1))  # tag 2: web
+riverctl send-layout-cmd wideriver "--layout monocle"
+
+riverctl set-focused-tags $((1 << 2))  # tag 3: music
+riverctl send-layout-cmd wideriver "--layout left"
+
+riverctl set-focused-tags $((1 << 3))  # tag 4: chat
+riverctl send-layout-cmd wideriver "--layout left"
+
+riverctl set-focused-tags $((1 << 4))  # tag 5: misc
+riverctl send-layout-cmd wideriver "--layout left"
+
+# Restore to tag 1
+riverctl set-focused-tags $((1 << 0))
+
+# LAUNCHER / APPS
+# ============================================
+# Terminal - run or raise
+riverctl map normal Super+Shift Return spawn 'sh ~/.config/river/scripts/run-or-raise.sh foot "foot" foot'
+riverctl map normal Super D spawn "wofi --show drun"
+riverctl map normal Super+Shift Escape spawn 'waylock -init-color 0x002b36 -input-color 0x268bd2 -fail-color 0xdc322f'
+riverctl map normal Super+Shift Delete spawn 'sh ~/.config/river/scripts/smart-sleep.sh'
+
+# QUICK LAUNCHERS (with tag following)
+# ============================================
+# Firefox - run or raise
+riverctl map normal Super B spawn 'sh ~/.config/river/scripts/run-or-raise.sh firefox "firefox" firefox'
+
+# File manager on current tag (no tag switch)
+riverctl map normal Super E spawn 'foot -e yazi'
+
+# Editor on current tag (no tag switch)
+riverctl map normal Super N spawn 'foot -e nvim'
+
+# Music player on tag 3 (follows to tag 3)
+riverctl map normal Super+Alt M spawn 'sh ~/.config/river/scripts/launch-app.sh 3 "foot -e ncspot"'
+
+# SCRATCHPAD
+# ============================================
+# Toggle scratchpad terminal (drops down from top)
+riverctl map normal Super grave spawn 'footclient -T scratchpad || foot -T scratchpad'
+
+# Scratchpad window floats centered
+riverctl rule-add -title "scratchpad" float
+
+# WINDOW MANAGEMENT
+# ============================================
+riverctl map normal Super+Shift C close
+riverctl map normal Super+Shift E exit
+riverctl map normal Super F toggle-float
+riverctl map normal Super M toggle-fullscreen
+riverctl map normal Super Return zoom  # promote to master
+
+# FOCUS WINDOWS
+# ============================================
+riverctl map normal Super J focus-view next
+riverctl map normal Super K focus-view previous
+
+# SWAP WINDOWS
+# ============================================
+riverctl map normal Super+Shift J swap next
+riverctl map normal Super+Shift K swap previous
+
+# LAYOUT CONTROL
+# ============================================
+# Adjust ratio (master area size)
+riverctl map normal Super H send-layout-cmd wideriver "--ratio -0.05"
+riverctl map normal Super L send-layout-cmd wideriver "--ratio +0.05"
+
+# Adjust window count in master
+riverctl map normal Super+Shift H send-layout-cmd wideriver "--count +1"
+riverctl map normal Super+Shift L send-layout-cmd wideriver "--count -1"
+
+# Switch layout orientation
+riverctl map normal Super+Ctrl H send-layout-cmd wideriver "--layout left"
+riverctl map normal Super+Ctrl L send-layout-cmd wideriver "--layout right"
+riverctl map normal Super+Ctrl K send-layout-cmd wideriver "--layout top"
+riverctl map normal Super+Ctrl J send-layout-cmd wideriver "--layout bottom"
+
+# Quick layout toggles
+riverctl map normal Super+Space send-layout-cmd wideriver "--layout-toggle"
+riverctl map normal Super+Alt+Shift M send-layout-cmd wideriver "--layout monocle"
+riverctl map normal Super G send-layout-cmd wideriver "--smart-gaps-toggle"
+
+# FLOATING WINDOW CONTROL
+# ============================================
+# Move floating windows
+riverctl map -repeat normal Super+Alt H move left 20
+riverctl map -repeat normal Super+Alt J move down 20
+riverctl map -repeat normal Super+Alt K move up 20
+riverctl map -repeat normal Super+Alt L move right 20
+
+# Snap to edges
+riverctl map normal Super+Alt+Control H snap left
+riverctl map normal Super+Alt+Control J snap down
+riverctl map normal Super+Alt+Control K snap up
+riverctl map normal Super+Alt+Control L snap right
+
+# Resize floating windows
+riverctl map -repeat normal Super+Alt+Shift H resize horizontal -20
+riverctl map -repeat normal Super+Alt+Shift J resize vertical   +20
+riverctl map -repeat normal Super+Alt+Shift K resize vertical   -20
+riverctl map -repeat normal Super+Alt+Shift L resize horizontal +20
+
+# MOUSE BINDINGS
+# ============================================
+riverctl map-pointer normal Super BTN_LEFT  move-view
+riverctl map-pointer normal Super BTN_RIGHT resize-view
+
+# MULTI-MONITOR SUPPORT
+# ============================================
+# Focus different monitor
+riverctl map normal Super Period focus-output next
+riverctl map normal Super Comma  focus-output previous
+
+# Move window to monitor AND follow it (default behavior)
+riverctl map normal Super+Shift Period spawn "riverctl send-to-output next && riverctl focus-output next"
+riverctl map normal Super+Shift Comma  spawn "riverctl send-to-output previous && riverctl focus-output previous"
+
+# Move window to monitor WITHOUT following (stay on current monitor)
+riverctl map normal Super+Ctrl Period spawn "riverctl send-to-output next"
+riverctl map normal Super+Ctrl Comma  spawn "riverctl send-to-output previous"
+
+# Swap ALL windows between two monitors
+riverctl map normal Super+Shift+Ctrl Period spawn "riverctl send-to-output -current-tags next"
+riverctl map normal Super+Shift+Ctrl Comma  spawn "riverctl send-to-output -current-tags previous"
+
+# TAGS (WORKSPACES) 1-5
+# ============================================
+for i in $(seq 1 5); do
+  tags=$((1 << ($i - 1)))
+
+  # Switch to tag
+  riverctl map normal Super $i set-focused-tags $tags
+
+  # Move window to tag (stay on current tag)
+  riverctl map normal Super+Shift $i set-view-tags $tags
+
+  # Toggle tag (view multiple tags at once)
+  riverctl map normal Super+Control $i toggle-focused-tags $tags
+
+  # Toggle window on additional tag (make window visible on multiple tags)
+  riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
+done
+
+# View all tags at once
+riverctl map normal Super 0 set-focused-tags $((1 << 32 - 1))
+# Move window to all tags
+riverctl map normal Super+Shift 0 set-view-tags $((1 << 32 - 1))
+
+# PASSTHROUGH MODE (disable all river bindings)
+# ============================================
+riverctl map normal      Super F11 enter-mode passthrough
+riverctl map passthrough Super F11 enter-mode normal
+
+# GAMING MODE (disable cursor warp for games)
+# ============================================
+riverctl map normal Super+Shift G spawn 'riverctl set-cursor-warp disabled && notify-send "Gaming Mode" "Cursor warp disabled"'
+riverctl map normal Super+Shift+Ctrl G spawn 'riverctl set-cursor-warp on-focus-change && notify-send "Gaming Mode" "Cursor warp enabled"'
+
+# EMERGENCY COMMANDS
+# ============================================
+# Kill frozen window (last resort - force close)
+riverctl map normal Super+Shift X spawn 'riverctl close'
+
+# Restart waybar if crashed
+riverctl map normal Super+Shift W spawn 'sh ~/.config/waybar/launch-waybar.sh &'
+
+# KEYBOARD LAYOUT
+# ============================================
+riverctl input keyboard-layout us,gr
+riverctl input keyboard-options grp:alt_shift_toggle
+
+# TOUCHPAD SETTINGS (if applicable)
+# ============================================
+# Enable tap to click
+for pad in $(riverctl list-inputs | grep -i touchpad); do
+    riverctl input "$pad" tap enabled
+    riverctl input "$pad" natural-scroll enabled
+    riverctl input "$pad" disable-while-typing enabled
+    riverctl input "$pad" accel-profile adaptive
+    riverctl input "$pad" pointer-accel 0.0
+done
+
+# MEDIA & SYSTEM CONTROLS
+# ============================================
+# Volume control (requires wpctl from pipewire)
+riverctl map normal None XF86AudioRaiseVolume  spawn 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+'
+riverctl map normal None XF86AudioLowerVolume  spawn 'wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-'
+riverctl map normal None XF86AudioMute         spawn 'wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'
+riverctl map normal None XF86AudioMicMute      spawn 'wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle'
+
+# Brightness control (requires brightnessctl)
+riverctl map normal None XF86MonBrightnessUp   spawn 'brightnessctl set +5%'
+riverctl map normal None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
+
+# Media playback (requires playerctl)
+riverctl map normal None XF86AudioPlay  spawn 'playerctl play-pause'
+riverctl map normal None XF86AudioNext  spawn 'playerctl next'
+riverctl map normal None XF86AudioPrev  spawn 'playerctl previous'
+
+# Alternative media keys (if function keys don't work)
+riverctl map normal Super+Alt P spawn 'playerctl play-pause'
+riverctl map normal Super+Alt bracketright spawn 'playerctl next'
+riverctl map normal Super+Alt bracketleft  spawn 'playerctl previous'
+
+# SCREENSHOTS
+# ============================================
+# Create screenshots directory
+mkdir -p "$HOME/Pictures/Screenshots"
+
+# Area selection with notification and clipboard
+riverctl map normal Super+Shift S spawn 'grim -g "$(slurp)" - | tee "$HOME/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png" | wl-copy && notify-send "Screenshot" "Saved and copied to clipboard"'
+
+# Full screen with notification
+riverctl map normal Super Print spawn 'grim "$HOME/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png" && notify-send "Screenshot" "Full screen saved"'
+
+# Clipboard manager - show history
+riverctl map normal Super V spawn 'cliphist list | wofi --dmenu | cliphist decode | wl-copy'
+
+# WINDOW RULES
+# ============================================
+# App-specific tag assignments
+# These work with launcher scripts that auto-switch to the tag
+riverctl rule-add -app-id "firefox" tags $((1 << 1))  # tag 2
+riverctl rule-add -app-id "foot" tags $((1 << 0))     # tag 1
+
+# Note: Tag rules are enabled, but we use launcher scripts that:
+# 1. Switch to the target tag first
+# 2. Launch the app (so you see it open)
+# This gives you both: apps on specific tags AND auto-follow behavior
+
+# Floating windows
+riverctl rule-add -title "Picture-in-Picture" float
+riverctl rule-add -app-id "pavucontrol" float
+riverctl rule-add -app-id "nm-connection-editor" float
+riverctl rule-add -app-id "Lxappearance" float
+riverctl rule-add -title "Open File" float
+riverctl rule-add -title "Save File" float
+
+# RELOAD CONFIG
+# ============================================
+riverctl map normal Super+Shift R spawn 'sh ~/.config/river/init'
+
+# ENVIRONMENT & DBUS
+# ============================================
+dbus-update-activation-environment --systemd --all
+systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
+
+# DISPLAY MANAGEMENT
+# ============================================
+riverctl spawn 'sh -c "way-displays > /tmp/way-displays.$USER.log 2>&1 &"'
+
+# AUTOSTART SERVICES
+# ============================================
+# Helper function to start services cleanly
+start_service() {
+    local service=$1
+    local command=$2
+    pkill -x "$service" 2>/dev/null || true
+    sleep 0.2
+    eval "$command" &
+}
+
+# Status bar
+start_service waybar "sh ~/.config/waybar/launch-waybar.sh"
+
+# Notification daemon
+start_service mako "mako"
+
+# Wallpaper
+WALLPAPER="$HOME/Pictures/SierraLeone.jpg"
+if [ -f "$WALLPAPER" ]; then
+    pkill -x swww-daemon 2>/dev/null || true
+    sleep 0.2
+    swww-daemon &
+    sleep 0.5
+    swww img "$WALLPAPER" &
+else
+    notify-send "Wallpaper" "Not found: $WALLPAPER"
+fi
+
+# Clipboard manager
+riverctl spawn 'wl-paste --watch cliphist store &'
+
+# Idle & lock (with dynamic monitor detection)
+# pkill -x swayidle 2>/dev/null || true
+# MONITORS=$(wlr-randr | grep "^[A-Z]" | awk '{print $1}')
+# TURN_OFF=""
+# TURN_ON=""
+# for mon in $MONITORS; do
+#     TURN_OFF="$TURN_OFF wlr-randr --output $mon --off; wlopm --off $mon;"
+#     TURN_ON="$TURN_ON wlr-randr --output $mon --on; wlopm --on $mon;"
+# done
+#
+# swayidle \
+#   timeout 700 'sh ~/.config/river/scripts/smart-lock.sh' \
+#   timeout 905 "sh -c '$TURN_OFF'" \
+#   resume "sh -c '$TURN_ON'" &
+#
+# AUTOSTART APPS
+# ============================================
+# Only start on desktop (not WSL/server)
+if [ -n "$WAYLAND_DISPLAY" ]; then
+    sleep 2
+    pgrep -x firefox >/dev/null || firefox &
+fi
+
+# STARTUP VALIDATION
+# ============================================
+sleep 1.5
+pgrep -x wideriver >/dev/null || notify-send "Warning" "Wideriver not running!" &
+pgrep -x waybar >/dev/null || notify-send "Warning" "Waybar not running!" &
+pgrep -x mako >/dev/null || notify-send "Warning" "Mako not running!" &
+
+# Log successful startup
+mkdir -p "$HOME/.local/state/river"
+echo "$(date): River started successfully" >> "$HOME/.local/state/river/startup.log"

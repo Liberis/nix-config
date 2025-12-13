@@ -1,0 +1,51 @@
+# Storage Classes for different workload types
+# Each storage class maps to a specific ZFS dataset with optimized settings
+
+---
+# Default storage class - general purpose k3s volumes
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+
+---
+# Media storage class - for media server persistent volumes
+# Maps to /mnt/media (optimized for large files)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: media-storage
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+parameters:
+  nodePath: /mnt/media
+
+---
+# Database storage class - for databases
+# Uses general k3s storage with database-friendly settings
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: database-storage
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+
+---
+# Download storage class - for *arr stack downloads
+# Maps to /mnt/downloads
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: download-storage
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+parameters:
+  nodePath: /mnt/downloads

@@ -1,0 +1,56 @@
+# Namespaces for organizing services
+# Separates different service categories for better management
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: media
+  labels:
+    name: media
+    purpose: media-server
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: downloads
+  labels:
+    name: downloads
+    purpose: automation
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: documents
+  labels:
+    name: documents
+    purpose: document-management
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: photos
+  labels:
+    name: photos
+    purpose: photo-management
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: finance
+  labels:
+    name: finance
+    purpose: personal-finance
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: storage
+  labels:
+    name: storage
+    purpose: cloud-storage
