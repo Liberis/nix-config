@@ -51,11 +51,11 @@ cd /tmp/nix-config
 ```bash
 # Basic installation (assuming /dev/sda)
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko \
-  -- --mode disko /tmp/nix-config#jarvis
+  -- --mode disko --flake /tmp/nix-config#jarvis
 
 # If your disk is different (e.g., /dev/nvme0n1):
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko \
-  -- --mode disko --arg disks '{ main = "/dev/nvme0n1"; }' /tmp/nix-config#jarvis
+  -- --mode disko --flake /tmp/nix-config#jarvis --arg disks '{ main = "/dev/nvme0n1"; }'
 ```
 
 This will:
@@ -90,18 +90,38 @@ After first boot:
 sudo btrfs filesystem show
 sudo btrfs subvolume list /
 
-# Verify quotas are set
-sudo btrfs qgroup show /
-
 # Check compression ratio
 sudo compsize /
 
-# Verify K3s is running
-sudo systemctl status k3s
-sudo k3s kubectl get nodes
+# Verify SSH is running
+sudo systemctl status sshd
+```
 
-# Check ZFS (if you set up data pools)
-sudo zpool status
+### 9. Optional: Enable Additional Services
+
+After the base system is stable, you can enable:
+
+**ZFS Storage Pool:**
+```bash
+# Create pool from 4x 1TB HDDs
+sudo zpool create tank raidz /dev/sd{b,c,d,e}
+
+# Then uncomment ZFS module in hosts/jarvis/default.nix
+# ../../modules/nixos/hardware/zfs.nix
+```
+
+**K3s (Kubernetes):**
+```bash
+# Uncomment k3s module in hosts/jarvis/default.nix
+# ../../modules/nixos/services/k3s-base.nix
+
+# Rebuild
+sudo nixos-rebuild switch --flake .#jarvis
+```
+
+**BTRFS Quotas:**
+```bash
+# Uncomment systemd.services.btrfs-setup-quotas in hosts/jarvis/default.nix
 ```
 
 ## Disk Layout

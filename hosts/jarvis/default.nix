@@ -18,10 +18,12 @@
     ./disko.nix
 
     # Storage and filesystems
-    ../../modules/nixos/hardware/zfs.nix
+    # TODO: Enable after creating ZFS pool 'tank' from 4x 1TB HDDs
+    # ../../modules/nixos/hardware/zfs.nix
 
     # Container orchestration
-    ../../modules/nixos/services/k3s-base.nix
+    # TODO: Enable after system is stable
+    # ../../modules/nixos/services/k3s-base.nix
   ];
 
   # Filesystem configuration is handled by disko.nix
@@ -45,9 +47,9 @@
   ];
   boot.kernelModules = [ "kvm-intel" ];
 
-  # Unique host ID for ZFS (required)
+  # Unique host ID for ZFS (required when ZFS is enabled)
   # Generated with: head -c 8 /dev/urandom | od -A n -t x1 | tr -d ' \n'
-  networking.hostId = "8c3f9a2e";
+  # networking.hostId = "8c3f9a2e";
 
   # BTRFS filesystem support
   boot.supportedFilesystems = [ "btrfs" ];
@@ -67,27 +69,27 @@
   '';
 
   # Systemd service to set BTRFS quotas on boot
-  # Quotas are set once and persist, but this ensures they're applied
-  systemd.services.btrfs-setup-quotas = {
-    description = "Set BTRFS subvolume quotas";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "local-fs.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      # Enable quotas if not already enabled
-      ${pkgs.btrfs-progs}/bin/btrfs quota enable / 2>/dev/null || true
-
-      # Set quotas for subvolumes (only if not already set)
-      ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 50G /@root / 2>/dev/null || true
-      ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 20G /@home / 2>/dev/null || true
-      ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 150G /@nix / 2>/dev/null || true
-      ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 10G /@var-log / 2>/dev/null || true
-      ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 250G /@rancher / 2>/dev/null || true
-
-      echo "BTRFS quotas configured"
-    '';
-  };
+  # TODO: Enable after system is stable
+  # systemd.services.btrfs-setup-quotas = {
+  #   description = "Set BTRFS subvolume quotas";
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "local-fs.target" ];
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     RemainAfterExit = true;
+  #   };
+  #   script = ''
+  #     # Enable quotas if not already enabled
+  #     ${pkgs.btrfs-progs}/bin/btrfs quota enable / 2>/dev/null || true
+  #
+  #     # Set quotas for subvolumes (only if not already set)
+  #     ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 50G /@root / 2>/dev/null || true
+  #     ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 20G /@home / 2>/dev/null || true
+  #     ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 150G /@nix / 2>/dev/null || true
+  #     ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 10G /@var-log / 2>/dev/null || true
+  #     ${pkgs.btrfs-progs}/bin/btrfs qgroup limit 250G /@rancher / 2>/dev/null || true
+  #
+  #     echo "BTRFS quotas configured"
+  #   '';
+  # };
 }
