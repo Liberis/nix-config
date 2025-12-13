@@ -13,7 +13,9 @@
     # Enable NFSv4 only (more secure, better performance)
     exports = ''
       # ZFS Shares - General purpose shared storage
-      /mnt/shares   192.168.1.0/24(rw,sync,no_subtree_check,root_squash)
+      # all_squash: map all users to anonymous user
+      # anonuid/anongid: specify the UID/GID for the anonymous user (1000 is typically the first user)
+      /mnt/shares   192.168.1.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
     '';
   };
 

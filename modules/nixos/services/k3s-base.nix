@@ -22,11 +22,12 @@ in
 
     # --- k3s ---
     services.k3s = {
-      extraFlags = [
-        "--write-kubeconfig-mode=0644"
-      ]
-      ++ (lib.optionals (cfg.role == "server" && cfg.tlsSans != [])
-          (map (san: "--tls-san=${san}") cfg.tlsSans));
+      extraFlags =
+        (lib.optionals (cfg.role == "server") [
+          "--write-kubeconfig-mode=0644"
+        ])
+        ++ (lib.optionals (cfg.role == "server" && cfg.tlsSans != [])
+            (map (san: "--tls-san=${san}") cfg.tlsSans));
     };
 
     # --- Base Tooling ---

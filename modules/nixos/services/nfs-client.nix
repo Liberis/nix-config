@@ -29,15 +29,6 @@
     ];
   };
 
-  # Ensure network is up before mounting NFS shares
-  systemd.mounts = lib.mkIf (config.fileSystems ? "/mnt/shares") [
-    {
-      where = "/mnt/shares";
-      requires = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-    }
-  ];
-
   # Firewall: NFS client doesn't need incoming ports
   # but may need outgoing to 2049, 111, 20048 (usually allowed by default)
 }
