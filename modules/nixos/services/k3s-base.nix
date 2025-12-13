@@ -33,6 +33,9 @@ in
     environment.systemPackages = with pkgs; [
       kubectl
       kubernetes-helm
+      kubernetes-helmPlugins.helm-diff
+      helmfile
+      k9s
       podman
       crun
       cni-plugins
