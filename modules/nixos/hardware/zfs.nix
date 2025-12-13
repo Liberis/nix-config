@@ -35,38 +35,38 @@
   '';
 
   # ZFS services
-  # services.zfs = {
-  #   # Auto-scrub for data integrity (Sunday at 2 AM)
-  #   autoScrub = {
-  #     enable = true;
-  #     interval = "Sun 02:00";
-  #     pools = [ "tank" ]; # Only scrub the data pool
-  #   };
-  #
-  #   # Auto-snapshots for data protection
-  #   autoSnapshot = {
-  #     enable = true;
-  #     frequent = 0; # Disable 15-min snapshots (not needed for media)
-  #     hourly = 24; # Keep 24 hourly snapshots (1 day)
-  #     daily = 14; # Keep 14 daily snapshots (2 weeks)
-  #     weekly = 8; # Keep 8 weekly snapshots (2 months)
-  #     monthly = 12; # Keep 12 monthly snapshots (1 year)
-  #   };
-  #
-  #   # TRIM support for SSDs
-  #   trim = {
-  #     enable = true;
-  #     interval = "weekly";
-  #   };
-  #
-  #   # ZFS Event Daemon for monitoring
-  #   zed.settings = {
-  #     ZED_DEBUG_LOG = "/tmp/zed.debug.log";
-  #     ZED_EMAIL_VERBOSE = false;
-  #     ZED_NOTIFY_VERBOSE = false;
-  #   };
-  # };
-  #
+  services.zfs = {
+    # Auto-scrub for data integrity (Sunday at 2 AM)
+    autoScrub = {
+      enable = true;
+      interval = "Sun 02:00";
+      pools = [ "tank" ]; # Only scrub the data pool
+    };
+
+    # Auto-snapshots for data protection
+    autoSnapshot = {
+      enable = true;
+      frequent = 0; # Disable 15-min snapshots (not needed for media)
+      hourly = 24; # Keep 24 hourly snapshots (1 day)
+      daily = 14; # Keep 14 daily snapshots (2 weeks)
+      weekly = 8; # Keep 8 weekly snapshots (2 months)
+      monthly = 12; # Keep 12 monthly snapshots (1 year)
+    };
+
+    # TRIM support for SSDs
+    trim = {
+      enable = true;
+      interval = "weekly";
+    };
+
+    # ZFS Event Daemon for monitoring
+    zed.settings = {
+      ZED_DEBUG_LOG = "/tmp/zed.debug.log";
+      ZED_EMAIL_VERBOSE = false;
+      ZED_NOTIFY_VERBOSE = false;
+    };
+  };
+
   # ZFS tools and utilities
   environment.systemPackages = with pkgs; [
     zfs
@@ -80,27 +80,27 @@
   #   zfs create -o mountpoint=/mnt/media -o compression=lz4 -o atime=off tank/media
   #   zfs create -o mountpoint=/mnt/shares -o compression=lz4 -o atime=off tank/shares
   #   zfs create -o mountpoint=/mnt/pv -o compression=lz4 -o atime=off -o recordsize=16K tank/pv
-  # fileSystems."/mnt/media" = {
-  #   device = "tank/media";
-  #   fsType = "zfs";
-  #   options = [ "nofail" ]; # Don't fail boot if pool is unavailable
-  # };
-  #
-  # fileSystems."/mnt/shares" = {
-  #   device = "tank/shares";
-  #   fsType = "zfs";
-  #   options = [ "nofail" ];
-  # };
-  #
-  # fileSystems."/mnt/pv" = {
-  #   device = "tank/pv";
-  #   fsType = "zfs";
-  #   options = [ "nofail" ];
-  # };
-  #
+  fileSystems."/mnt/media" = {
+    device = "tank/media";
+    fsType = "zfs";
+    options = [ "nofail" ]; # Don't fail boot if pool is unavailable
+  };
+
+  fileSystems."/mnt/shares" = {
+    device = "tank/shares";
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
+
+  fileSystems."/mnt/pv" = {
+    device = "tank/pv";
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
+
   # Networking configuration for ZFS
   # Set a unique hostId for ZFS (required)
   # Generate your own with: head -c 8 /dev/urandom | od -A n -t x1 | tr -d ' \n'
   # Note: This should be overridden in the host configuration
-  networking.hostId = lib.mkDefault "00000000";
+  networking.hostId = lib.mkDefault "cd6f7b2cc48cf0e7";
 }
