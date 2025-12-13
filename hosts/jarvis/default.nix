@@ -22,8 +22,7 @@
     ../../modules/nixos/hardware/gpu-amd.nix # AMD R750 4GB
 
     # Storage and filesystems
-    # TODO: Enable after creating ZFS pool 'tank' from 4x 1TB HDDs
-    # ../../modules/nixos/hardware/zfs.nix
+    ../../modules/nixos/hardware/zfs.nix
 
     # Container orchestration
     # TODO: Enable after system is stable
@@ -52,7 +51,7 @@
   # Kernel configuration
   # Note: CPU-specific settings (kvm-intel, intel_pstate) are in cpu-intel.nix
   # Note: Generic kernel settings are in the kernel module (if imported via profile)
-  boot.kernelPackages = pkgs.linuxPackages_6_12;
+  # Note: Kernel version is set by zfs.nix to ensure ZFS compatibility (uses LTS kernel)
 
   # Server-specific kernel parameters
   boot.kernelParams = [
@@ -90,7 +89,7 @@
 
   # Unique host ID for ZFS (required when ZFS is enabled)
   # Generated with: head -c 8 /dev/urandom | od -A n -t x1 | tr -d ' \n'
-  # networking.hostId = "8c3f9a2e";
+  networking.hostId = "8c3f9a2e";
 
   # BTRFS filesystem support
   boot.supportedFilesystems = [ "btrfs" ];

@@ -18,17 +18,18 @@
   boot.kernelPackages = pkgs.linuxPackages;
 
   # ARC (cache) tuning for 32GB RAM
-  # Allocate 16GB max to ARC, leaving 16GB for k3s and services
+  # Following rule: 2GB base + 1GB/TB storage = 2 + 3 = 5GB minimum
+  # Allocate 8GB max to ARC, leaving 24GB for k3s and services
   boot.kernelParams = [
-    "zfs.zfs_arc_max=17179869184" # 16GB max
-    "zfs.zfs_arc_min=8589934592" # 8GB min
+    "zfs.zfs_arc_max=8589934592" # 8GB max
+    "zfs.zfs_arc_min=5368709120" # 5GB min (recommended for 3TB pool)
   ];
 
   # Additional ZFS module parameters
   boot.extraModprobeConfig = ''
     # ARC tuning for media server workload
-    options zfs zfs_arc_max=17179869184
-    options zfs zfs_arc_min=8589934592
+    options zfs zfs_arc_max=8589934592
+    options zfs zfs_arc_min=5368709120
     # Prefetch tuning (good for sequential media reads)
     options zfs zfs_prefetch_disable=0
   '';
@@ -74,8 +75,29 @@
     mbuffer # Faster zfs send/receive
   ];
 
+  # ZFS dataset mount points
+  # Create datasets manually after pool creation (see commands below)
+  fileSystems."/mnt/media" = {
+    device = "tank/media";
+    fsType = "zfs";
+    options = [ "nofail" ]; # Don't fail boot if pool is unavailable
+  };
+
+  fileSystems."/mnt/shares" = {
+    device = "tank/shares";
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
+
+  fileSystems."/mnt/docker" = {
+    device = "tank/docker";
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
+
   # Networking configuration for ZFS
   # Set a unique hostId for ZFS (required)
   # Generate your own with: head -c 8 /dev/urandom | od -A n -t x1 | tr -d ' \n'
+  # Note: This should be overridden in the host configuration
   networking.hostId = lib.mkDefault "00000000";
 }
