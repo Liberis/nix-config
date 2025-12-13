@@ -30,7 +30,8 @@
 
   # K3s server configuration
   services.k3s = {
-    roleConfig = "server";
+    enable = true;
+    role = "server";
     clusterInit = true;
     tlsSans = [
       "192.168.1.140"

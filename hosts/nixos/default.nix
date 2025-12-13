@@ -15,7 +15,8 @@
 
   # K3s agent configuration - connect to jarvis server
   services.k3s = {
-    roleConfig = "agent";
+    enable = true;
+    role = "agent";
     serverAddr = "https://192.168.1.140:6443";
     tokenFile = "/var/lib/rancher/k3s/server/node-token";
   };

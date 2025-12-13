@@ -5,38 +5,14 @@ let
 in
 {
   options.services.k3s = {
-    roleConfig = lib.mkOption {
-      type = lib.types.enum [ "server" "agent" ];
-      default = "server";
-      description = "K3s role: server or agent";
-    };
-
-    serverAddr = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Server address for agent nodes (e.g., https://192.168.1.140:6443)";
-    };
-
-    tokenFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      description = "Path to file containing the K3s token for agent authentication";
-    };
-
     tlsSans = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [];
       description = "Additional TLS SANs for the server certificate";
     };
-
-    clusterInit = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Initialize a new cluster (only for server role)";
-    };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     # --- Podman ---
     virtualisation.podman = {
       enable = true;
@@ -46,19 +22,11 @@ in
 
     # --- k3s ---
     services.k3s = {
-      enable = true;
-      role = cfg.roleConfig;
-      clusterInit = lib.mkIf (cfg.roleConfig == "server") cfg.clusterInit;
-
       extraFlags = [
         "--write-kubeconfig-mode=0644"
       ]
-      ++ (lib.optionals (cfg.roleConfig == "server" && cfg.tlsSans != [])
-          (map (san: "--tls-san=${san}") cfg.tlsSans))
-      ++ (lib.optionals (cfg.roleConfig == "agent" && cfg.serverAddr != null)
-          [ "--server=${cfg.serverAddr}" ]);
-
-      tokenFile = lib.mkIf (cfg.roleConfig == "agent" && cfg.tokenFile != null) cfg.tokenFile;
+      ++ (lib.optionals (cfg.role == "server" && cfg.tlsSans != [])
+          (map (san: "--tls-san=${san}") cfg.tlsSans));
     };
 
     # --- Base Tooling ---
@@ -87,6 +55,6 @@ in
     networking.firewall.allowedTCPPorts = [
       80
       443
-    ] ++ (lib.optionals (cfg.roleConfig == "server") [ 6443 ]);
+    ] ++ (lib.optionals (cfg.role == "server") [ 6443 ]);
   };
 }
