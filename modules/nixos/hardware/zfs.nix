@@ -76,7 +76,10 @@
   ];
 
   # ZFS dataset mount points
-  # Create datasets manually after pool creation (see commands below)
+  # Create datasets manually after pool creation:
+  #   zfs create -o mountpoint=/mnt/media -o compression=lz4 -o atime=off tank/media
+  #   zfs create -o mountpoint=/mnt/shares -o compression=lz4 -o atime=off tank/shares
+  #   zfs create -o mountpoint=/mnt/pv -o compression=lz4 -o atime=off -o recordsize=16K tank/pv
   fileSystems."/mnt/media" = {
     device = "tank/media";
     fsType = "zfs";
@@ -89,8 +92,8 @@
     options = [ "nofail" ];
   };
 
-  fileSystems."/mnt/docker" = {
-    device = "tank/docker";
+  fileSystems."/mnt/pv" = {
+    device = "tank/pv";
     fsType = "zfs";
     options = [ "nofail" ];
   };
