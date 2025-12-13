@@ -26,6 +26,9 @@
 
     # Container orchestration - K3s Server
     ../../modules/nixos/services/k3s-base.nix
+
+    # NFS server for sharing ZFS datasets
+    ../../modules/nixos/services/nfs.nix
   ];
 
   # K3s server configuration

@@ -11,6 +11,9 @@
 
     # K3s with NVIDIA GPU support for container workloads
     ../../modules/nixos/services/k3s-nvidia.nix
+
+    # NFS client for mounting shares from jarvis
+    ../../modules/nixos/services/nfs-client.nix
   ];
 
   # K3s agent configuration - connect to jarvis server
