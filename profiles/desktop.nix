@@ -30,7 +30,7 @@
     ../modules/nixos/hardware/kernel.nix
 
     # Graphics and display
-    ../modules/nixos/hardware/nvidia.nix
+    ../modules/nixos/hardware/gpu-nvidia.nix
     ../modules/nixos/desktop/wayland.nix
     ../modules/nixos/desktop/display-manager.nix
 

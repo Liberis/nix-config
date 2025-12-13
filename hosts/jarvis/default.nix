@@ -17,6 +17,10 @@
     # Declarative disk management (partitioning and filesystems)
     ./disko.nix
 
+    # Hardware-specific modules
+    ../../modules/nixos/hardware/cpu-intel.nix # Intel Xeon E2680v5
+    ../../modules/nixos/hardware/gpu-amd.nix # AMD R750 4GB
+
     # Storage and filesystems
     # TODO: Enable after creating ZFS pool 'tank' from 4x 1TB HDDs
     # ../../modules/nixos/hardware/zfs.nix
@@ -45,16 +49,13 @@
     "sd_mod"
     "sr_mod"
   ];
-  boot.kernelModules = [ "kvm-intel" ];
-
-  # Kernel configuration for Intel Xeon
+  # Kernel configuration
+  # Note: CPU-specific settings (kvm-intel, intel_pstate) are in cpu-intel.nix
+  # Note: Generic kernel settings are in the kernel module (if imported via profile)
   boot.kernelPackages = pkgs.linuxPackages_6_12;
 
-  # Intel-specific kernel parameters
+  # Server-specific kernel parameters
   boot.kernelParams = [
-    # Intel P-State driver for better CPU power management and performance
-    "intel_pstate=active"
-
     # Boot and logging
     "quiet"
     "loglevel=3"
@@ -64,7 +65,7 @@
     "transparent_hugepage=madvise" # Enable THP only when requested
   ];
 
-  # Enable redistributable firmware for Intel hardware
+  # Enable redistributable firmware
   hardware.enableRedistributableFirmware = true;
 
   # Kernel sysctl tuning for server performance

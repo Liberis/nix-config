@@ -6,19 +6,17 @@
 }:
 
 {
+  # System-agnostic kernel configuration
+  # CPU and GPU-specific settings should be in separate modules:
+  #   - cpu-intel.nix or cpu-amd.nix
+  #   - gpu-nvidia.nix or gpu-amd.nix
+
   # Use latest NixOS kernel package (no custom compilation)
   # This provides a well-tested, pre-compiled kernel with all necessary drivers
   boot.kernelPackages = pkgs.linuxPackages_6_12;
 
-  # Kernel parameters for optimal performance and hardware support
+  # Generic kernel parameters (not CPU/GPU specific)
   boot.kernelParams = [
-    # AMD CPU optimizations - enable AMD P-State driver for better power management
-    "amd_pstate=active"
-
-    # NVIDIA Wayland support
-    "nvidia-drm.modeset=1"
-    "nvidia-drm.fbdev=1"
-
     # Boot and logging
     "quiet"
     "loglevel=3"
@@ -29,25 +27,10 @@
   ];
 
   # Enable all redistributable firmware
-  # This includes firmware for AMD CPU/GPU, WiFi, Bluetooth, Ethernet, and other hardware
+  # This includes firmware for CPU/GPU, WiFi, Bluetooth, Ethernet, and other hardware
   hardware.enableRedistributableFirmware = true;
 
-  # Kernel modules to load
-  boot.kernelModules = [
-    "kvm-amd"
-    "nvidia"
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
-  ];
-
-  # Blacklist unneeded modules
-  boot.blacklistedKernelModules = [
-    "intel_rapl_common"
-    "intel_rapl_msr"
-  ];
-
-  # System optimizations
+  # System optimizations (generic, not hardware-specific)
   boot.kernel.sysctl = {
     # Network performance
     "net.core.rmem_max" = 134217728;
