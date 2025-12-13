@@ -12,6 +12,7 @@
   # Enable ZFS support
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
+  boot.zfs.extraPools = [ "tank" ]; # Auto-import tank pool at boot
 
   # ZFS kernel module - using stable LTS kernel for ZFS compatibility
   # ZFS is only officially supported on LTS kernels
