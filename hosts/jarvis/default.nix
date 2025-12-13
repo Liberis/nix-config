@@ -26,7 +26,7 @@
 
     # Container orchestration
     # TODO: Enable after system is stable
-    # ../../modules/nixos/services/k3s-base.nix
+     ../../modules/nixos/services/k3s-base.nix
   ];
 
   # Filesystem configuration is handled by disko.nix
