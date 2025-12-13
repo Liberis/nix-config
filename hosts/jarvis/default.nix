@@ -24,10 +24,19 @@
     # Storage and filesystems
     ../../modules/nixos/hardware/zfs.nix
 
-    # Container orchestration
-    # TODO: Enable after system is stable
-     ../../modules/nixos/services/k3s-base.nix
+    # Container orchestration - K3s Server
+    ../../modules/nixos/services/k3s-base.nix
   ];
+
+  # K3s server configuration
+  services.k3s = {
+    roleConfig = "server";
+    clusterInit = true;
+    tlsSans = [
+      "192.168.1.140"
+      "jarvis.local"
+    ];
+  };
 
   # Filesystem configuration is handled by disko.nix
   # See disko.nix for BTRFS subvolume layout:
