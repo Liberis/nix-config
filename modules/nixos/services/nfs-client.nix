@@ -26,8 +26,15 @@
       "x-systemd.idle-timeout=600" # Unmount after 10 minutes of inactivity
       "noatime"       # Don't update access times (performance)
       "rw"            # Read-write access
+      "user"          # Allow regular user to mount/unmount
     ];
   };
+
+  # Create the mount point directory with user ownership
+  # This allows the user to access the mount without sudo
+  systemd.tmpfiles.rules = [
+    "d /mnt/shares 0755 liberis users -"
+  ];
 
   # Firewall: NFS client doesn't need incoming ports
   # but may need outgoing to 2049, 111, 20048 (usually allowed by default)

@@ -9,7 +9,7 @@
     # Shell enhancements
     starship # Modern shell prompt
     zsh # Z shell
-
+    detox
     # Modern CLI replacements
     zoxide # Smarter cd for jumping to frequently used directories
     bat # A cat clone with syntax highlighting
