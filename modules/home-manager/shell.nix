@@ -19,7 +19,7 @@
     jq # Command-line JSON processor
     fzf # Fuzzy finder for files, history and more
     tldr # Simplified man pages with community examples
-
+    comvmv
     # Terminal UI applications
     lazygit # Terminal UI for Git operations
     ncspot # Spotify terminal client
