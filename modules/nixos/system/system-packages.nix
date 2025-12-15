@@ -13,5 +13,6 @@
     pciutils
     psmisc
     bind
+    gparted
   ];
 }
