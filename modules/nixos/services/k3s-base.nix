@@ -41,6 +41,7 @@ in
       crun
       cni-plugins
       nerdctl
+      fluxcd
       runc
       coreutils
     ];
@@ -57,8 +58,18 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
+      53    # DNS (Pi-hole)
       80
       443
+      10250  # Kubelet metrics
     ] ++ (lib.optionals (cfg.role == "server") [ 6443 ]);
+
+    networking.firewall.allowedUDPPorts = [
+      53    # DNS (Pi-hole)
+      8472  # Flannel VXLAN - required for cross-node pod networking
+    ];
+
+    # Trust pod network interfaces for inter-pod communication
+    networking.firewall.trustedInterfaces = [ "cni0" "flannel.1" ];
   };
 }
