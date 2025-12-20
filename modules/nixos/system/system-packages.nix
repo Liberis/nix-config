@@ -10,7 +10,7 @@
     usbutils
     lshw
     iftop
-    itop
+    iotop
     dmidecode
     smartmontools
     lm_sensors
