@@ -5,14 +5,27 @@
   # via Home Manager in home/liberis/cli.nix instead.
   environment.systemPackages = with pkgs; [
     git
+    inetutils
+    pciutils
+    usbutils
+    lshw
+    iftop
+    itop
+    dmidecode
+    smartmontools
+    lm_sensors
+    nvme_cli
+    hdparm
+    vim
     curl
     wget
     bashmount
     unzip
     tree
-    pciutils
     psmisc
     bind
+    ipconfig
     gparted
+    parted
   ];
 }
