@@ -14,7 +14,6 @@
     dmidecode
     smartmontools
     lm_sensors
-    nvme_cli
     hdparm
     vim
     curl
@@ -24,7 +23,6 @@
     tree
     psmisc
     bind
-    ipconfig
     gparted
     parted
   ];
