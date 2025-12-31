@@ -81,19 +81,19 @@
   #   zfs create -o mountpoint=/mnt/media -o compression=lz4 -o atime=off tank/media
   #   zfs create -o mountpoint=/mnt/shares -o compression=lz4 -o atime=off tank/shares
   #   zfs create -o mountpoint=/mnt/pv -o compression=lz4 -o atime=off -o recordsize=16K tank/pv
-  fileSystems."/mnt/media" = {
+  fileSystems."/tank/media" = {
     device = "tank/media";
     fsType = "zfs";
     options = [ "nofail" ]; # Don't fail boot if pool is unavailable
   };
 
-  fileSystems."/mnt/shares" = {
+  fileSystems."/tank/shares" = {
     device = "tank/shares";
     fsType = "zfs";
     options = [ "nofail" ];
   };
 
-  fileSystems."/mnt/pv" = {
+  fileSystems."/mnt/k8s" = {
     device = "tank/pv";
     fsType = "zfs";
     options = [ "nofail" ];

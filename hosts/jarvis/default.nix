@@ -16,7 +16,7 @@
   imports = [
     # Declarative disk management (partitioning and filesystems)
     ./disko.nix
-
+    ./hardware-configuration.nix
     # Hardware-specific modules
     ../../modules/nixos/hardware/cpu-intel.nix # Intel Xeon E2680v5
     ../../modules/nixos/hardware/gpu-amd.nix # AMD R750 4GB
@@ -37,7 +37,7 @@
     role = "server";
     clusterInit = true;
     tlsSans = [
-      "192.168.88.240"
+      "192.168.88.11"
       "jarvis.local"
     ];
   };

@@ -15,7 +15,7 @@
       # ZFS Shares - General purpose shared storage
       # all_squash: map all users to anonymous user
       # anonuid/anongid: specify the UID/GID for the anonymous user (1000 is typically the first user)
-      /mnt/shares   192.168.1.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
+      /tank/shares   192.168.88.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
     '';
   };
 

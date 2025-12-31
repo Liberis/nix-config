@@ -24,7 +24,7 @@ in
     services.k3s = {
       extraFlags =
         (lib.optionals (cfg.role == "server") [
-          "--write-kubeconfig-mode=0644"
+        "--write-kubeconfig-mode=0644 --node-ip=192.168.88.11 --flannel-iface=ens1"
         ])
         ++ (lib.optionals (cfg.role == "server" && cfg.tlsSans != [])
             (map (san: "--tls-san=${san}") cfg.tlsSans));
@@ -61,6 +61,9 @@ in
       53    # DNS (Pi-hole)
       80
       443
+      445
+      2283
+      8123
       10250  # Kubelet metrics
     ] ++ (lib.optionals (cfg.role == "server") [ 6443 ]);
 

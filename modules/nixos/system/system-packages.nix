@@ -11,6 +11,7 @@
     lshw
     iftop
     iotop
+    iperf
     dmidecode
     smartmontools
     lm_sensors

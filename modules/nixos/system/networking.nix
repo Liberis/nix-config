@@ -11,7 +11,12 @@
   };
   # DNS configuration - Pi-hole as primary, Cloudflare as fallback
   networking.nameservers = [
+<<<<<<< HEAD
     "192.168.10.254"  # Pi-hole on jarvis
+=======
+    "192.168.88.11"
+#    "192.168.88.10"   # Pi-hole on jarvis
+>>>>>>> 9d2a9f5 (commit changes)
     "1.1.1.1"        # Cloudflare fallback
   ];
 
