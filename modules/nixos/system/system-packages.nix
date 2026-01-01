@@ -12,6 +12,7 @@
     iftop
     iotop
     iperf
+    openssl
     dmidecode
     smartmontools
     lm_sensors

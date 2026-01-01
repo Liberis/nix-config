@@ -76,29 +76,7 @@
     mbuffer # Faster zfs send/receive
   ];
 
-  # ZFS dataset mount points
-  # Create datasets manually after pool creation:
-  #   zfs create -o mountpoint=/mnt/media -o compression=lz4 -o atime=off tank/media
-  #   zfs create -o mountpoint=/mnt/shares -o compression=lz4 -o atime=off tank/shares
-  #   zfs create -o mountpoint=/mnt/pv -o compression=lz4 -o atime=off -o recordsize=16K tank/pv
-  fileSystems."/tank/media" = {
-    device = "tank/media";
-    fsType = "zfs";
-    options = [ "nofail" ]; # Don't fail boot if pool is unavailable
-  };
-
-  fileSystems."/tank/shares" = {
-    device = "tank/shares";
-    fsType = "zfs";
-    options = [ "nofail" ];
-  };
-
-  fileSystems."/mnt/k8s" = {
-    device = "tank/pv";
-    fsType = "zfs";
-    options = [ "nofail" ];
-  };
-
+  #
   # Networking configuration for ZFS
   # Set a unique hostId for ZFS (required)
   # Generate your own with: head -c 8 /dev/urandom | od -A n -t x1 | tr -d ' \n'

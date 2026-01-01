@@ -55,21 +55,21 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/tank" =
-    { device = "tank";
-      fsType = "zfs";
-    };
-
-
-  fileSystems."/tank/k8s/volumes" =
-    { device = "tank/k8s/volumes";
-      fsType = "zfs";
-    };
-
-  fileSystems."/tank/k8s/snapshots" =
-    { device = "tank/k8s/snapshots";
-      fsType = "zfs";
-    };
+  # fileSystems."/tank" =
+  #   { device = "tank";
+  #     fsType = "zfs";
+  #   };
+  #
+  #
+  # fileSystems."/tank/k8s/volumes" =
+  #   { device = "tank/k8s/volumes";
+  #     fsType = "zfs";
+  #   };
+  #
+  # fileSystems."/tank/k8s/snapshots" =
+  #   { device = "tank/k8s/snapshots";
+  #     fsType = "zfs";
+  #   };
 
   swapDevices = [ ];
 

@@ -25,5 +25,16 @@ in
       # "ssh-ed25519 AAAA... democratic-csi"
     ];
   };
+  security.sudo.extraRules = [
+    {
+      users = [ "democratic-csi" ];
+      commands = [
+        { command = "/run/current-system/sw/bin/zfs"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/zpool"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/chown"; options = [ "NOPASSWD" ]; }
+        { command = "/run/current-system/sw/bin/chmod"; options = [ "NOPASSWD" ]; }
+      ];
+    }
+  ];
 
 }

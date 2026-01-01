@@ -18,7 +18,7 @@
 
   # Mount NFS shares from jarvis
   fileSystems."/mnt/shares" = {
-    device = "192.168.1.140:/mnt/shares";
+    device = "192.168.88.11:/mnt/shares";
     fsType = "nfs4";
     options = [
       "nofail"        # Don't fail boot if server is unavailable

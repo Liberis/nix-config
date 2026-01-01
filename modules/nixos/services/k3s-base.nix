@@ -63,7 +63,9 @@ in
       443
       445
       2283
+      8080
       8123
+      9000
       10250  # Kubelet metrics
     ] ++ (lib.optionals (cfg.role == "server") [ 6443 ]);
 

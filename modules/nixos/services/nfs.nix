@@ -7,18 +7,19 @@
 {
   # NFS server configuration for network file sharing
   # Provides NFSv4 server for Linux/macOS clients
-
+  boot.supportedFilesystems = [ "nfs" ];
+  services.rpcbind.enable = true; # needed for NFS
   services.nfs.server = {
     enable = true;
     # Enable NFSv4 only (more secure, better performance)
-    exports = ''
-      # ZFS Shares - General purpose shared storage
-      # all_squash: map all users to anonymous user
-      # anonuid/anongid: specify the UID/GID for the anonymous user (1000 is typically the first user)
-      /tank/shares   192.168.88.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
-    '';
-  };
-
+  #   exports = ''
+  #     # ZFS Shares - General purpose shared storage
+  #     # all_squash: map all users to anonymous user
+  #     # anonuid/anongid: specify the UID/GID for the anonymous user (1000 is typically the first user)
+  #     /tank/shares   192.168.88.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=100)
+  #   '';
+ };
+  #
   # Open NFS ports in firewall
   networking.firewall = {
     allowedTCPPorts = [
