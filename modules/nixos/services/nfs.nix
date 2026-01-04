@@ -11,6 +11,7 @@
   services.rpcbind.enable = true; # needed for NFS
   services.nfs.server = {
     enable = true;
+    nproc = 32;
     # Enable NFSv4 only (more secure, better performance)
   #   exports = ''
   #     # ZFS Shares - General purpose shared storage

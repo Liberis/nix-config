@@ -37,7 +37,7 @@
     role = "server";
     clusterInit = true;
     tlsSans = [
-      "192.168.88.11"
+      "192.168.10.11"
       "jarvis.local"
     ];
   };
