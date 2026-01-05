@@ -1,0 +1,105 @@
+/* One Dark Minimal (4px grid) */
+* {
+    font-family: "Terminess Nerd Font", monospace;
+    font-size: 16px;
+    /* pairs well with height:24 */
+    min-height: 0;
+}
+
+window#waybar {
+    background: #282c34;
+    color: #abb2bf;
+    padding: 0 8px;
+    /* multiple of 4 */
+}
+
+button {
+    border: none;
+    border-radius: 0;
+
+}
+button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+    background: inherit;
+}
+
+/* Disable hover highlight everywhere */
+/* Kill hover + active effects on river tags */
+/* river/tags uses #tags */
+#tags button {
+    padding: 0 4px;
+    /* ok (4) */
+    margin: 0 4px;
+    /* was 1px → 4px */
+    border-radius: 0;
+    background: transparent;
+    color: #5c6370;
+}
+
+#tags button.focused {
+    background: transparent;
+    color: #61afef;
+    font-weight: bold;
+}
+
+#tags button.urgent {
+    background: transparent;
+    color: #e06c75;
+    font-weight: bold;
+}
+
+/* niri/workspaces uses #workspaces */
+#workspaces button {
+    padding: 0 4px;
+    margin: 0 4px;
+    border-radius: 0;
+    background: transparent;
+    color: #5c6370;
+}
+
+#workspaces button.active {
+    background: transparent;
+    color: #61afef;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    background: transparent;
+    color: #e06c75;
+    font-weight: bold;
+}
+
+#window {
+    color: #98c379;
+}
+
+/* right/center modules – keep padding multiples of 4 */
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#clock {
+    padding: 0 8px;
+    /* was 6px → 8px */
+}
+
+#cpu {
+    color: #e5c07b;
+}
+
+#memory {
+    color: #c678dd;
+}
+
+#network {
+    color: #56b6c2;
+}
+
+#pulseaudio {
+    color: #61afef;
+}
+
+#clock {
+    color: #98c379;
+}

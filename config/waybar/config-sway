@@ -1,0 +1,77 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 18,
+  "spacing": 4,
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+
+  "modules-left": [
+    "sway/workspaces",
+    "sway/window"
+  ],
+
+  "modules-right": [
+    "cpu",
+    "memory",
+    "network",
+    "pulseaudio",
+    "clock"
+  ],
+
+  "sway/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": false,
+    "format": "{name}",
+    "format-icons": {
+      "1:term": "term",
+      "2:web": "web",
+      "3:music": "music",
+      "4:chat": "chat",
+      "5:misc": "misc",
+      "urgent": "",
+      "focused": "",
+      "default": ""
+    }
+  },
+
+  "sway/window": {
+    "format": "{}",
+    "max-length": 70,
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "🌍 $1",
+      "(.*) - foot": " $1"
+    }
+  },
+
+  "clock": {
+    "format": "{:%H:%M  %d %b}",
+    "tooltip": false
+  },
+
+  "cpu": {
+    "format": " {usage}%",
+    "interval": 5
+  },
+
+  "memory": {
+    "format": " {used:0.1f}G",
+    "interval": 5
+  },
+
+  "network": {
+    "format-wifi": "  {essid}",
+    "format-ethernet": "󰈀 {ipaddr}",
+    "format-disconnected": ""
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "",
+    "scroll-step": 2,
+    "format-icons": {
+      "default": ["", "", ""]
+    }
+  }
+}

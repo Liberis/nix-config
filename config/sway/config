@@ -1,0 +1,336 @@
+# ============================================
+# SWAY WM - TRANSLATED FROM RIVER CONFIG
+# ============================================
+
+# COLOR SCHEME (Solarized Dark)
+# ============================================
+set $base03 #002b36
+set $base01 #586e75
+set $base1 #93a1a1
+set $red #dc322f
+
+# BASIC SETTINGS
+# ============================================
+focus_follows_mouse yes
+seat * hide_cursor 0
+seat * xcursor_theme Bibata-Modern-Ice 24
+
+# Cursor follows focus (sway automatically moves cursor when switching windows)
+focus_wrapping no
+
+# BORDERS
+# ============================================
+default_border pixel 2
+default_floating_border pixel 2
+client.focused $base1 $base1 $base03 $base1 $base1
+client.unfocused $base01 $base01 $base1 $base01 $base01
+client.urgent $red $red $base03 $red $red
+
+# Background color
+output * bg $base03 solid_color
+
+# GAPS (matching wideriver settings)
+# ============================================
+gaps inner 0
+gaps outer 0
+smart_gaps on
+
+# WORKSPACES (tags -> workspaces)
+# ============================================
+set $ws1 "1:term"
+set $ws2 "2:web"
+set $ws3 "3:music"
+set $ws4 "4:chat"
+set $ws5 "5:misc"
+
+# Workspace layout defaults
+workspace $ws1 layout default
+workspace $ws2 layout tabbed  # monocle equivalent
+workspace $ws3 layout default
+workspace $ws4 layout default
+workspace $ws5 layout default
+
+# LAUNCHER / APPS
+# ============================================
+# Set modifier key (Mod4 = Super/Windows key)
+set $mod Mod4
+
+# Terminal - run or raise
+bindsym $mod+Shift+Return exec ~/.config/sway/scripts/run-or-raise.sh foot "foot" foot
+
+# Application launcher
+bindsym $mod+d exec wofi --show drun
+
+# Lock screen
+bindsym $mod+Shift+Escape exec waylock -init-color 0x002b36 -input-color 0x268bd2 -fail-color 0xdc322f
+
+# Smart sleep
+bindsym $mod+Shift+Delete exec sh ~/.config/sway/scripts/smart-sleep.sh
+
+# QUICK LAUNCHERS
+# ============================================
+# Firefox - run or raise
+bindsym $mod+b exec ~/.config/sway/scripts/run-or-raise.sh firefox "firefox" firefox
+
+# File manager
+bindsym $mod+e exec foot -e yazi
+
+# Editor
+bindsym $mod+n exec foot -e nvim
+
+# Music player on workspace 3
+bindsym $mod+Mod1+m exec sh ~/.config/sway/scripts/launch-app.sh $ws3 "foot -e ncspot"
+
+# SCRATCHPAD
+# ============================================
+# Toggle scratchpad terminal
+bindsym $mod+grave exec ~/.config/sway/scripts/scratchpad-term.sh
+
+# Scratchpad controls
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+# WINDOW MANAGEMENT
+# ============================================
+bindsym $mod+Shift+c kill
+bindsym $mod+Shift+e exit
+bindsym $mod+f floating toggle
+bindsym $mod+m fullscreen toggle
+bindsym $mod+Return focus parent, swap container with mark _swap, focus child; mark --toggle _swap
+
+# FOCUS WINDOWS
+# ============================================
+bindsym $mod+j focus next
+bindsym $mod+k focus prev
+
+# Also support arrow keys
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# SWAP WINDOWS
+# ============================================
+bindsym $mod+Shift+j swap container with next, focus next
+bindsym $mod+Shift+k swap container with prev, focus prev
+
+# Also support arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# LAYOUT CONTROL
+# ============================================
+# Adjust split ratio (resize)
+bindsym $mod+h resize shrink width 50px
+bindsym $mod+l resize grow width 50px
+
+# Master/stack manipulation
+bindsym $mod+Shift+h split h
+bindsym $mod+Shift+l split v
+
+# Switch layout orientation
+bindsym $mod+Ctrl+h split h
+bindsym $mod+Ctrl+l split h
+bindsym $mod+Ctrl+k split v
+bindsym $mod+Ctrl+j split v
+
+# Quick layout toggles
+bindsym $mod+space layout toggle split tabbed
+bindsym $mod+Mod1+Shift+m layout tabbed
+bindsym $mod+g gaps toggle
+
+# FLOATING WINDOW CONTROL
+# ============================================
+# Move floating windows
+bindsym $mod+Mod1+h move left 20px
+bindsym $mod+Mod1+j move down 20px
+bindsym $mod+Mod1+k move up 20px
+bindsym $mod+Mod1+l move right 20px
+
+# Resize floating windows
+bindsym $mod+Mod1+Shift+h resize shrink width 20px
+bindsym $mod+Mod1+Shift+j resize grow height 20px
+bindsym $mod+Mod1+Shift+k resize shrink height 20px
+bindsym $mod+Mod1+Shift+l resize grow width 20px
+
+# Center floating window
+bindsym $mod+c move position center
+
+# MOUSE BINDINGS
+# ============================================
+floating_modifier $mod normal
+bindsym --whole-window $mod+button2 kill
+
+# MULTI-MONITOR SUPPORT
+# ============================================
+# Focus different monitor
+bindsym $mod+period focus output right
+bindsym $mod+comma focus output left
+
+# Move window to monitor AND follow it
+bindsym $mod+Shift+period move container to output right, focus output right
+bindsym $mod+Shift+comma move container to output left, focus output left
+
+# Move window to monitor WITHOUT following
+bindsym $mod+Ctrl+period move container to output right
+bindsym $mod+Ctrl+comma move container to output left
+
+# Move entire workspace to different output
+bindsym $mod+Shift+Ctrl+period move workspace to output right
+bindsym $mod+Shift+Ctrl+comma move workspace to output left
+
+# WORKSPACES (TAGS) 1-5
+# ============================================
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+
+# Move window to workspace (stay on current)
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+
+# Move window to workspace AND follow
+bindsym $mod+Ctrl+1 move container to workspace $ws1, workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2, workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3, workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4, workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5, workspace $ws5
+
+# PASSTHROUGH MODE (disable all sway bindings)
+# ============================================
+mode "passthrough" {
+    bindsym $mod+F11 mode "default"
+}
+bindsym $mod+F11 mode "passthrough"
+
+# GAMING MODE (disable cursor warp for games)
+# ============================================
+bindsym $mod+Shift+g seat * hide_cursor 0, exec notify-send "Gaming Mode" "Cursor settings adjusted"
+
+# EMERGENCY COMMANDS
+# ============================================
+# Kill frozen window
+bindsym $mod+Shift+x kill
+
+# Restart waybar if crashed
+bindsym $mod+Shift+w exec sh ~/.config/waybar/launch-waybar.sh
+
+# Reload sway configuration
+bindsym $mod+Shift+r reload
+
+# KEYBOARD LAYOUT
+# ============================================
+input type:keyboard {
+    xkb_layout "us,gr"
+    xkb_options "grp:alt_shift_toggle"
+    repeat_delay 300
+    repeat_rate 50
+}
+
+# TOUCHPAD SETTINGS
+# ============================================
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+    accel_profile adaptive
+    pointer_accel 0.0
+}
+
+# MEDIA & SYSTEM CONTROLS
+# ============================================
+# Volume control
+bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
+# Brightness control
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+
+# Media playback
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Alternative media keys
+bindsym $mod+Mod1+p exec playerctl play-pause
+bindsym $mod+Mod1+bracketright exec playerctl next
+bindsym $mod+Mod1+bracketleft exec playerctl previous
+
+# SCREENSHOTS
+# ============================================
+# Area selection with notification and clipboard
+bindsym $mod+Shift+s exec grim -g "$(slurp)" - | tee "$HOME/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png" | wl-copy && notify-send "Screenshot" "Saved and copied to clipboard"
+
+# Full screen with notification
+bindsym Print exec grim "$HOME/Pictures/Screenshots/$(date +%Y%m%d-%H%M%S).png" && notify-send "Screenshot" "Full screen saved"
+
+# Clipboard manager - show history
+bindsym $mod+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy
+
+# WINDOW RULES
+# ============================================
+# App-specific workspace assignments
+assign [app_id="firefox"] $ws2
+assign [app_id="foot"] $ws1
+
+# Floating windows
+for_window [app_id="scratchpad"] floating enable, resize set 80ppt 80ppt, move position center
+for_window [title="Picture-in-Picture"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="nm-connection-editor"] floating enable
+for_window [app_id="Lxappearance"] floating enable
+for_window [title="Open File"] floating enable
+for_window [title="Save File"] floating enable
+
+# DISPLAY MANAGEMENT
+# ============================================
+exec way-displays > /tmp/way-displays.$USER.log 2>&1
+
+# AUTOSTART SERVICES
+# ============================================
+# Status bar
+exec sh ~/.config/waybar/launch-waybar.sh
+
+# Notification daemon
+exec mako
+
+# Wallpaper
+exec_always {
+    pkill -x swww-daemon || true
+    sleep 0.2
+    swww-daemon &
+    sleep 0.5
+    if [ -f "$HOME/Pictures/SierraLeone.jpg" ]; then
+        swww img "$HOME/Pictures/SierraLeone.jpg"
+    fi
+}
+
+# Clipboard manager
+exec wl-paste --watch cliphist store
+
+# Idle & lock
+exec swayidle \
+    timeout 700 'sh ~/.config/sway/scripts/smart-lock.sh' \
+    timeout 905 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"'
+
+# Screenshots directory
+exec mkdir -p "$HOME/Pictures/Screenshots"
+
+# AUTOSTART APPS
+# ============================================
+exec sleep 2 && pgrep -x firefox || firefox
+
+# Bar configuration (using waybar, defined separately)
+# Note: Waybar is launched via autostart, not through sway's bar block

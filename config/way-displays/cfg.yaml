@@ -1,0 +1,23 @@
+# Arrange monitors left-to-right
+ARRANGE: ROW
+ALIGN: MIDDLE
+
+# Define the order: left (1080p Dell P2719H), right (2K Dell AW2724DM), then TV
+# Using monitor descriptions instead of connector names for robustness
+ORDER:
+  - 'Dell Inc. DELL P2719H FDS0R83'
+  - 'Dell Inc. AW2724DM 4P02JV3'
+  - HDMI-A-1
+
+# Scaling
+SCALING: true
+AUTO_SCALE: false
+SCALE:
+  - NAME_DESC: 'Dell Inc. DELL P2719H FDS0R83'
+    SCALE: 1.0
+  - NAME_DESC: 'Dell Inc. AW2724DM 4P02JV3'
+    SCALE: 1.25
+    HZ: 165
+# Disable the TV by default
+DISABLED:
+  - HDMI-A-1
