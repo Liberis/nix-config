@@ -68,12 +68,12 @@ in
 
   # Link individual yazi config files (not the whole directory)
   # This allows home-manager to manage plugins/flavors separately
-  xdg.configFile."yazi/yazi.toml".source = ../../config/yazi/yazi.toml;
-  xdg.configFile."yazi/keymap.toml".source = ../../config/yazi/keymap.toml;
-  xdg.configFile."yazi/theme.toml".source = ../../config/yazi/theme.toml;
-  xdg.configFile."yazi/init.lua".source = ../../config/yazi/init.lua;
-  xdg.configFile."yazi/plugin.toml".source = ../../config/yazi/plugin.toml;
-
+  # xdg.configFile."yazi/yazi.toml".source = ../../config/yazi/yazi.toml;
+  # xdg.configFile."yazi/keymap.toml".source = ../../config/yazi/keymap.toml;
+  # xdg.configFile."yazi/theme.toml".source = ../../config/yazi/theme.toml;
+  # xdg.configFile."yazi/init.lua".source = ../../config/yazi/init.lua;
+  # xdg.configFile."yazi/plugin.toml".source = ../../config/yazi/plugin.toml;
+  #
   # No packages installed here - use role-specific modules
   home.packages = with pkgs; [ ];
 }
