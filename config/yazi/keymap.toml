@@ -64,7 +64,7 @@ keymap = [
 # Operation
 { on = "o",         run = "open",                        desc = "Open selected files" },
 { on = "O",         run = "open --interactive",          desc = "Open selected files interactively" },
-{ on = "<Enter>",   run = "open",                        desc = "Open selected files" },
+{ on = "<Enter>",   run = "plugin smart-enter",          desc = "Enter directory or open file" },
 { on = "<S-Enter>", run = "open --interactive",          desc = "Open selected files interactively" },
 { on = "y",         run = "yank",                        desc = "Yank selected files (copy)" },
 { on = "x",         run = "yank --cut",                  desc = "Yank selected files (cut)" },
@@ -152,7 +152,7 @@ keymap = [
 { on = "}", run = "tab_swap 1",  desc = "Swap current tab with next tab" },
 
 # Tasks
-{ on = "w", run = "tasks_show", desc = "Show task manager" },
+{ on = "w", run = "tasks:show", desc = "Show task manager" },
 
 # Help
 { on = "~",    run = "help", desc = "Open help" },

@@ -16,6 +16,7 @@
     lm_sensors
     hdparm
     vim
+    iperf
     curl
     wget
     bashmount

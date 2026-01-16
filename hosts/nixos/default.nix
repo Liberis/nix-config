@@ -20,7 +20,7 @@
   services.k3s = {
     enable = true;
     role = "agent";
-    serverAddr = "https://192.168.1.140:6443";
+    serverAddr = "https://192.168.88.240:6443";
     tokenFile = "/var/lib/rancher/k3s/agent-token";
   };
 }

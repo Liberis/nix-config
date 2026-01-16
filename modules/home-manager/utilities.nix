@@ -12,7 +12,10 @@
     dua # Interactive disk usage analyser and cleanup tool
     zip
     unzip
+    deluge
     # Clipboard manager
     cliphist # Clipboard manager with history
+    # File type detection (required for yazi previews)
+    file
   ];
 }

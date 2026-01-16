@@ -22,7 +22,30 @@ in
   programs.neovim.enable = true;
   programs.tmux.enable = true;
   programs.btop.enable = true;
-  programs.yazi.enable = true;
+
+  # Yazi file manager with plugins
+  programs.yazi = {
+    enable = true;
+    enableBashIntegration = true;
+
+    plugins = {
+      smart-enter = pkgs.fetchFromGitHub {
+        owner = "yazi-rs";
+        repo = "plugins";
+        rev = "86d28e4fb4f25f36cc501b8cb0badb37a6b14263";
+        hash = "sha256-hEnrvfJwCAgM12QwPmjHEwF5xNrwqZH1fTIb/QG0NFI=";
+      } + "/smart-enter.yazi";
+    };
+
+    flavors = {
+      dracula = pkgs.fetchFromGitHub {
+        owner = "yazi-rs";
+        repo = "flavors";
+        rev = "ffe6e3a16c5c51d7e2dedacf8de662fe2413f73a";
+        hash = "sha256-hEnrvfJwCAgM12QwPmjHEwF5xNrwqZH1fTIb/QG0NFI=";
+      } + "/dracula.yazi";
+    };
+  };
 
   # Bash shell configuration
   home.file.".bashrc".source = ../../config/bash/.bashrc;
@@ -43,10 +66,13 @@ in
     recursive = true;
   };
 
-  xdg.configFile."yazi" = {
-    source = ../../config/yazi;
-    recursive = true;
-  };
+  # Link individual yazi config files (not the whole directory)
+  # This allows home-manager to manage plugins/flavors separately
+  xdg.configFile."yazi/yazi.toml".source = ../../config/yazi/yazi.toml;
+  xdg.configFile."yazi/keymap.toml".source = ../../config/yazi/keymap.toml;
+  xdg.configFile."yazi/theme.toml".source = ../../config/yazi/theme.toml;
+  xdg.configFile."yazi/init.lua".source = ../../config/yazi/init.lua;
+  xdg.configFile."yazi/plugin.toml".source = ../../config/yazi/plugin.toml;
 
   # No packages installed here - use role-specific modules
   home.packages = with pkgs; [ ];
