@@ -62,12 +62,12 @@
   # Desktop Environment Configuration
   # ============================================================================
   desktop = {
-    # Default user for the display manager (greetd/regreet)
-    # This user will be pre-selected at the login screen
+    # Default user for autologin
+    # This user will be automatically logged in at boot
     defaultUser = "liberis";
 
-    # Cache directory for regreet display manager
+    # Cache directory for desktop environment
     # Used to store theme cache and temporary files
-    cacheDir = "/var/cache/regreet";
+    cacheDir = "/var/cache/desktop";
   };
 }

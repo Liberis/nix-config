@@ -12,7 +12,7 @@
   #   - Wayland compositor support (River)
   #   - Audio via PipeWire
   #   - Bluetooth support
-  #   - Display manager (greetd + regreet)
+  #   - Display manager (ly)
   #   - Desktop applications
   #
   # Requirements:

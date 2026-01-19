@@ -52,15 +52,16 @@ output "HDMI-A-1" {
     off
 }
 
+// PREFER NO CLIENT-SIDE DECORATIONS
+// ============================================
+prefer-no-csd
+
 // LAYOUT CONFIGURATION
 // ============================================
 layout {
     gaps 0
 
     center-focused-column "never"
-
-    // Disable client-side decorations (titlebars)
-    prefer-no-csd
 
     preset-column-widths {
         proportion 0.33333
@@ -110,6 +111,12 @@ environment {
 
 // WINDOW RULES
 // ============================================
+// Focus windows automatically when they request activation
+window-rule {
+    match is-active-in-column=false
+    focus-on-activate
+}
+
 window-rule {
     match app-id=r#"firefox"#
     open-on-workspace "web"
@@ -159,10 +166,6 @@ screenshot-path "~/Pictures/Screenshots/%Y%m%d-%H%M%S.png"
 
 // HOTKEY OVERLAY (press Super to show)
 // ============================================
-hotkey-overlay {
-    skip-at-startup
-}
-
 // BINDINGS
 // ============================================
 binds {

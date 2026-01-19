@@ -5,9 +5,8 @@
   ...
 }:
 {
-  # System-wide Wayland packages (themes and compositor tools)
+  # System-wide Wayland packages
   environment.systemPackages = with pkgs; [
-    arc-theme # GTK theme
-    cage # Wayland kiosk compositor (used by greetd)
+    # Add any additional Wayland packages here if needed
   ];
 }

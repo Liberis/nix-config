@@ -8,6 +8,10 @@
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
 
+# Wait for XDG desktop portal to be ready
+# This prevents waybar portal timeout errors
+sleep 1
+
 # DISPLAY MANAGEMENT
 # ============================================
 # Monitors are configured natively in config.kdl (no need for way-displays)
