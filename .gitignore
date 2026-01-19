@@ -1,0 +1,22 @@
+# Claude Code files
+.claude/
+**/.claude/
+
+# Build results
+result
+result-*
+
+# Nix
+.direnv/
+.envrc
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
