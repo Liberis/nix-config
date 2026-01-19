@@ -24,7 +24,7 @@ in
     services.k3s = {
       extraFlags =
         (lib.optionals (cfg.role == "server") [
-        "--write-kubeconfig-mode=0644 --node-ip=192.168.10.11 --flannel-iface=ens1 --disable=servicelb"
+        "--write-kubeconfig-mode=0644 --node-ip=192.168.10.11 --flannel-iface=ens1 --disable=servicelb --disable=traefik"
         ])
         ++ (lib.optionals (cfg.role == "server" && cfg.tlsSans != [])
             (map (san: "--tls-san=${san}") cfg.tlsSans));
