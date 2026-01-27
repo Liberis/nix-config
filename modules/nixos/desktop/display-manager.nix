@@ -6,6 +6,7 @@
 }:
 let
   cfg = import ../../../config.nix;
+  sddm-sugar-dark = pkgs.callPackage ./sddm-sugar-dark.nix { };
 in
 {
   # SDDM Display Manager Configuration
@@ -16,11 +17,15 @@ in
       enable = true;
       wayland.enable = true;
       package = pkgs.kdePackages.sddm;
+      theme = "sugar-dark";
     };
 
     # Ensure niri session is available
     sessionPackages = [ pkgs.niri ];
   };
+
+  # Install SDDM theme
+  environment.systemPackages = [ sddm-sugar-dark ];
 
   # Create cache directory
   systemd.tmpfiles.rules = [

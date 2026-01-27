@@ -112,10 +112,11 @@ environment {
 // WINDOW RULES
 // ============================================
 // Focus windows automatically when they request activation
-window-rule {
-    match is-active-in-column=false
-    focus-on-activate
-}
+// NOTE: focus-on-activate is not supported in niri 25.11
+// window-rule {
+//     match is-active-in-column=false
+//     focus-on-activate
+// }
 
 window-rule {
     match app-id=r#"firefox"#

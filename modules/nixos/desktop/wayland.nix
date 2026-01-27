@@ -6,12 +6,12 @@
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-wlr
       pkgs.xdg-desktop-portal-gtk
     ];
     # Modern XDG portal configuration format
     config.common.default = [
-      "gnome"
+      "wlr"
       "gtk"
     ];
   };
