@@ -34,6 +34,7 @@ let
     ./home-manager/media.nix
     ./home-manager/utilities.nix
     ./home-manager/communication.nix
+    ./home-manager/ai-ml.nix
   ];
 
   # Determine which modules to import based on roles
