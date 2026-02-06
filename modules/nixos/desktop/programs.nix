@@ -6,7 +6,7 @@
 
   # Web browser
   programs.firefox.enable = true;
-
+  programs.chromium.enable = true;
   # River compositor (Wayland window manager)
   programs.river-classic.enable = true;
 

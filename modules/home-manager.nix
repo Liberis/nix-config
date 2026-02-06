@@ -19,7 +19,6 @@ let
   # Core modules imported for all roles
   coreModules = [
     ./home-manager/common.nix
-    ./home-manager/cli.nix
   ];
 
   # Development and shell tools for server/wsl roles

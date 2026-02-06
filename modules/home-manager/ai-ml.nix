@@ -9,6 +9,6 @@
     # AI/LLM tools
     lmstudio # Local LLM inference UI
     antigravity
-    claude
+    claude-code
   ];
 }
