@@ -8,5 +8,7 @@
   home.packages = with pkgs; [
     # AI/LLM tools
     lmstudio # Local LLM inference UI
+    antigravity
+    claude
   ];
 }

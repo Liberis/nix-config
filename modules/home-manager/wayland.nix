@@ -16,7 +16,6 @@
     wlr-randr # Output management tool
     bibata-cursors # Cursor theme
     conky # System monitor
-    sway # Alternative Wayland compositor
 
     # Screenshot and screen recording
     grim # Screenshot utility
