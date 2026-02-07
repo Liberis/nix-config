@@ -32,6 +32,7 @@
     XDG_SESSION_TYPE = "wayland";
     MOZ_ENABLE_WAYLAND = "1";
     QT_QPA_PLATFORM = "wayland";
+    NIXOS_OZONE_WL = "1"; # Enable Wayland for Electron/Chromium apps
     FREETYPE_PROPERTIES = "truetype:interpreter-version=35";
     QT_SCALE_FACTOR = "1";
     QT_FONT_DPI = "96";

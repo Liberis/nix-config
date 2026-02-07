@@ -20,7 +20,7 @@ in
     createHome = true;
     shell = "/run/current-system/sw/bin/bash";
     openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKAZyRyuXGBHgFOG8zv72GKxs5ZexZeW/T+3IXjclAOo democratic-csi"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMeHQxk8IKUEc6zsbUfDNmN8pzEGyMy3Hw2MMgMsw7Il democratic-csi"
       # Add your generated public key here
       # "ssh-ed25519 AAAA... democratic-csi"
     ];
