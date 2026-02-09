@@ -11,6 +11,7 @@
     zsh # Z shell
     detox
     # Modern CLI replacements
+    claude-code
     zoxide # Smarter cd for jumping to frequently used directories
     bat # A cat clone with syntax highlighting
     eza # A modern replacement for ls

@@ -66,10 +66,12 @@ in
       3456
       5201
       6379
+      6443
       8080
       8123
       9000
-      10250  # Kubelet metrics
+      10250
+      33010# Kubelet metrics
     ] ++ (lib.optionals (cfg.role == "server") [ 6443 ]);
 
     networking.firewall.allowedUDPPorts = [
