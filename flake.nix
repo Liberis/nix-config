@@ -25,7 +25,6 @@
       pkgs = nixpkgs.legacyPackages.${system};
 
       # Helper function to build a NixOS system configuration
-      # Automatically applies base profile, role-specific profiles, and home-manager
       mkHost =
         { hostName, roles }:
         lib.nixosSystem {
