@@ -38,6 +38,10 @@
     ../../modules/nixos/services/vpn.nix
     # NFS server for sharing ZFS datasets
     ../../modules/nixos/services/nfs.nix
+
+    # Prometheus exporters for hardware monitoring
+    ../../modules/nixos/services/smartctl-exporter.nix
+    ../../modules/nixos/services/zfs-exporter.nix
   ];
 
   # K3s agent configuration - connect to mainframe control plane
