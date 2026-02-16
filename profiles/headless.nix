@@ -5,7 +5,7 @@
   ...
 }:
 {
-  # Server profile - Minimal headless server configuration
+  # Headless profile - Minimal headless server configuration
   #
   # Provides:
   #   - Bootloader configuration
@@ -14,7 +14,7 @@
   # Requirements:
   #   - None (minimal configuration)
   #
-  # Used by: Headless servers, remote access only
+  # Used by: All headless servers (control plane, storage, etc.)
 
   imports = [
     # Boot

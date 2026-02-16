@@ -6,7 +6,17 @@ in
   # Define the primary user on the system.  Adjust the groups as
   # necessary for your use case.  Additional groups can be added in
   # host‑specific configuration if required.
-  users.groups.democratic-csi = {};
+
+  # NOTE: democratic-csi user configuration has been moved to:
+  #   modules/nixos/services/democratic-csi.nix
+  # This provides hardened security with:
+  #   - No shell access (nologin)
+  #   - Restricted sudo commands (path validation)
+  #   - Command wrappers (dataset/path restrictions)
+  #   - SSH key-only authentication with chroot
+  #   - Process and file limits
+  #   - Audit logging
+
   users.users.${cfg.user.name} = {
     isNormalUser = true;
     description = cfg.user.fullName;

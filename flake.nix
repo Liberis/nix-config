@@ -9,6 +9,8 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -53,15 +55,12 @@
     in
     {
       nixosConfigurations = {
-        nixos = mkHost {
-          hostName = "nixos";
-          roles = [ "desktop" ];
-        };
+        # Desktop workstation with GPU (AMD Ryzen 9900X + NVIDIA RTX 5070Ti)
         jarvis = lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit inputs;
-            roles = [ "server" ];
+            roles = [ "desktop" ];
           };
           modules = [
             # Disko for declarative disk management
@@ -83,10 +82,79 @@
             home-manager.nixosModules.home-manager
             ./modules/home-manager.nix
 
-            # Server profile
-            ./profiles/server.nix
+            # Desktop profile
+            ./profiles/desktop.nix
           ];
         };
+
+        # K3s control plane (Dell OptiPlex 3080 - Intel i7-10710T)
+        mainframe = lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            roles = [ "headless" ];
+          };
+          modules = [
+            # Disko for declarative disk management
+            disko.nixosModules.disko
+
+            # Base profile (common to all hosts)
+            ./profiles/base.nix
+
+            # Flake-managed defaults
+            ./modules/nixos/system/flake-defaults.nix
+
+            # Host-specific configuration (includes disko.nix)
+            ./hosts/mainframe
+
+            # Set hostname
+            { networking.hostName = "mainframe"; }
+
+            # Home-Manager integration
+            home-manager.nixosModules.home-manager
+            ./modules/home-manager.nix
+
+            # Headless server profile
+            ./profiles/headless.nix
+          ];
+        };
+
+        # Storage server and K3s worker (Lenovo P510 - Intel Xeon E2680v5)
+        akasha = lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            roles = [ "headless" ];
+          };
+          modules = [
+            # Disko for declarative disk management
+            disko.nixosModules.disko
+
+            # Base profile (common to all hosts)
+            ./profiles/base.nix
+
+            # Flake-managed defaults
+            ./modules/nixos/system/flake-defaults.nix
+
+            # Host-specific configuration (includes disko.nix)
+            ./hosts/akasha
+
+            # Set hostname
+            { networking.hostName = "akasha"; }
+
+            # Home-Manager integration
+            home-manager.nixosModules.home-manager
+            ./modules/home-manager.nix
+
+            # Headless server profile
+            ./profiles/headless.nix
+
+            # Storage server profile (ZFS + NFS)
+            ./profiles/storage-server.nix
+          ];
+        };
+
+        # WSL development environment
         wsl = mkHost {
           hostName = "wsl";
           roles = [ "wsl" ];
@@ -96,8 +164,9 @@
       # Flake checks for validation and testing
       checks.${system} = {
         # Check that all configurations build successfully
-        nixos-build = self.nixosConfigurations.nixos.config.system.build.toplevel;
         jarvis-build = self.nixosConfigurations.jarvis.config.system.build.toplevel;
+        mainframe-build = self.nixosConfigurations.mainframe.config.system.build.toplevel;
+        akasha-build = self.nixosConfigurations.akasha.config.system.build.toplevel;
         wsl-build = self.nixosConfigurations.wsl.config.system.build.toplevel;
 
         # Format check for Nix files

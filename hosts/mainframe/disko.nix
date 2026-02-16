@@ -1,46 +1,30 @@
 {
-  # =============================================================================
-  # Disko configuration for jarvis desktop
-  # =============================================================================
-  # ⚠️ WARNING: THIS FILE IS NOT USED FOR DUAL-BOOT INSTALLATION! ⚠️
+  # Disko configuration for OptiPlex 3080
+  # Declarative disk partitioning and formatting for 256GB NVMe
   #
-  # This file is kept for reference only. The jarvis system uses dual-boot
-  # with Windows 11, which requires MANUAL partitioning during installation.
+  # K3s control plane optimized layout:
+  #   - Separate /var/lib/rancher for etcd data (nodatacow for performance)
+  #   - Minimal subvolumes (no desktop bloat)
+  #   - Compressed logs and root
   #
-  # For dual-boot installation instructions, see:
-  #   - JARVIS_INSTALLATION_GUIDE.md
+  # Usage during installation:
+  #   sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /path/to/this/flake#optiplex
   #
-  # This Disko config is only for:
-  #   - Single NixOS installation (no Windows)
-  #   - Complete wipe and fresh install
-  #   - Reference for partition layout
-  #
-  # Current jarvis setup:
-  #   - Hardware: AMD Ryzen 9 9900X, NVIDIA RTX 5070Ti, 64GB DDR5
-  #   - 1TB NVMe: Windows C: (300GB) + Games D: (400GB) + NixOS (300GB)
-  #   - 2TB NVMe PCIe5: K3s Storage (2TB BTRFS)
-  #
-  # If you want to use Disko (single-OS only):
-  #   sudo nix run github:nix-community/disko -- \
-  #     --mode disko \
-  #     --arg disks '{ main = "/dev/nvme0n1"; }' \
-  #     /path/to/this/flake#jarvis
-  #
-  # IMPORTANT: This will DESTROY all data on the target disk!
-  # =============================================================================
+  # Or specify device:
+  #   sudo nix run github:nix-community/disko -- --mode disko --arg disks '{ main = "/dev/nvme0n1"; }' /path/to/this/flake#optiplex
 
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = "/dev/nvme0n1"; # Adjust to your NVMe device (check with lsblk)
+        device = "/dev/nvme0n1"; # Adjust to your NVMe device
         content = {
           type = "gpt";
           partitions = {
             # EFI boot partition
             ESP = {
               priority = 1;
-              size = "1G";
+              size = "512M";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -53,12 +37,10 @@
               };
             };
 
-            # Swap partition (16GB - smaller due to 64GB RAM)
-            # Allows suspend-to-disk and handles memory pressure
-            # Note: For dual-boot, swap is created manually as partition 5
+            # Swap partition (8GB for 16GB RAM system)
             swap = {
               priority = 2;
-              size = "16G";
+              size = "8G";
               content = {
                 type = "swap";
                 randomEncryption = true; # Encrypt swap for security
@@ -85,7 +67,7 @@
                     ];
                   };
 
-                  # Home subvolume - user files, documents, downloads
+                  # Home subvolume - minimal (server, no user files)
                   "@home" = {
                     mountpoint = "/home";
                     mountOptions = [
@@ -112,12 +94,13 @@
                     ];
                   };
 
-                  # Rancher subvolume - K3s worker data
+                  # Rancher subvolume - K3s control plane data (etcd)
+                  # CRITICAL: nodatacow for etcd performance
                   "@rancher" = {
                     mountpoint = "/var/lib/rancher";
                     mountOptions = [
                       "noatime"
-                      "nodatacow" # Disable CoW for k3s performance
+                      "nodatacow" # Essential for etcd performance
                     ];
                   };
 
@@ -129,16 +112,6 @@
                       "noatime"
                     ];
                   };
-
-                  # Optional: Games subvolume (if you store games on system drive)
-                  # Uncomment if needed
-                  # "@games" = {
-                  #   mountpoint = "/home/games";
-                  #   mountOptions = [
-                  #     "noatime"
-                  #     "nodatacow"  # Better for large game files
-                  #   ];
-                  # };
                 };
               };
             };

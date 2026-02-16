@@ -1,39 +1,23 @@
 {
-  # =============================================================================
-  # Disko configuration for jarvis desktop
-  # =============================================================================
-  # ⚠️ WARNING: THIS FILE IS NOT USED FOR DUAL-BOOT INSTALLATION! ⚠️
+  # Disko configuration for Jarvis server
+  # Declarative disk partitioning and formatting for 512GB SSD
   #
-  # This file is kept for reference only. The jarvis system uses dual-boot
-  # with Windows 11, which requires MANUAL partitioning during installation.
+  # Usage during installation:
+  #   sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko /path/to/this/flake#jarvis
   #
-  # For dual-boot installation instructions, see:
-  #   - JARVIS_INSTALLATION_GUIDE.md
-  #
-  # This Disko config is only for:
-  #   - Single NixOS installation (no Windows)
-  #   - Complete wipe and fresh install
-  #   - Reference for partition layout
-  #
-  # Current jarvis setup:
-  #   - Hardware: AMD Ryzen 9 9900X, NVIDIA RTX 5070Ti, 64GB DDR5
-  #   - 1TB NVMe: Windows C: (300GB) + Games D: (400GB) + NixOS (300GB)
-  #   - 2TB NVMe PCIe5: K3s Storage (2TB BTRFS)
-  #
-  # If you want to use Disko (single-OS only):
-  #   sudo nix run github:nix-community/disko -- \
-  #     --mode disko \
-  #     --arg disks '{ main = "/dev/nvme0n1"; }' \
-  #     /path/to/this/flake#jarvis
-  #
-  # IMPORTANT: This will DESTROY all data on the target disk!
-  # =============================================================================
+  # This will automatically:
+  #   - Partition the disk (1GB EFI + rest BTRFS)
+  #   - Format filesystems
+  #   - Create BTRFS subvolumes
+  #   - Mount everything
 
   disko.devices = {
     disk = {
       main = {
+        # Device path - will be passed at runtime or detected
+        # Override with: --arg disks '{ main = "/dev/nvme0n1"; }'
         type = "disk";
-        device = "/dev/nvme0n1"; # Adjust to your NVMe device (check with lsblk)
+        device = "/dev/sda";
         content = {
           type = "gpt";
           partitions = {
@@ -53,28 +37,16 @@
               };
             };
 
-            # Swap partition (16GB - smaller due to 64GB RAM)
-            # Allows suspend-to-disk and handles memory pressure
-            # Note: For dual-boot, swap is created manually as partition 5
-            swap = {
-              priority = 2;
-              size = "16G";
-              content = {
-                type = "swap";
-                randomEncryption = true; # Encrypt swap for security
-              };
-            };
-
             # BTRFS root partition with subvolumes
             root = {
-              priority = 3;
+              priority = 2;
               size = "100%";
               content = {
                 type = "btrfs";
                 extraArgs = [
                   "-f"
                   "-L nixos"
-                ];
+                ]; # Force and set label
                 subvolumes = {
                   # Root subvolume - OS files
                   "@root" = {
@@ -85,7 +57,7 @@
                     ];
                   };
 
-                  # Home subvolume - user files, documents, downloads
+                  # Home subvolume - user files
                   "@home" = {
                     mountpoint = "/home";
                     mountOptions = [
@@ -112,7 +84,7 @@
                     ];
                   };
 
-                  # Rancher subvolume - K3s worker data
+                  # Rancher subvolume - k3s data
                   "@rancher" = {
                     mountpoint = "/var/lib/rancher";
                     mountOptions = [
@@ -129,16 +101,6 @@
                       "noatime"
                     ];
                   };
-
-                  # Optional: Games subvolume (if you store games on system drive)
-                  # Uncomment if needed
-                  # "@games" = {
-                  #   mountpoint = "/home/games";
-                  #   mountOptions = [
-                  #     "noatime"
-                  #     "nodatacow"  # Better for large game files
-                  #   ];
-                  # };
                 };
               };
             };

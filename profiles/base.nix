@@ -23,5 +23,8 @@
     ../modules/nixos/system/networking.nix
     ../modules/nixos/system/system-packages.nix
     ../modules/nixos/system/base.nix
+    ../modules/nixos/system/secrets.nix
+    ../modules/nixos/filesystem/btrfs-quotas.nix
+    ../modules/nixos/utilities/network-tools.nix
   ];
 }

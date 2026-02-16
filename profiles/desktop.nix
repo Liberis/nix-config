@@ -8,12 +8,12 @@
   # Desktop profile - Full graphical workstation configuration
   #
   # Provides:
-  #   - NVIDIA GPU drivers (beta, open kernel)
-  #   - Wayland compositor support (River)
+  #   - NVIDIA GPU drivers (open kernel modules)
+  #   - Wayland compositor support (Niri, Sway, River)
   #   - Audio via PipeWire
   #   - Bluetooth support
-  #   - Display manager (ly)
-  #   - Desktop applications
+  #   - Display manager (SDDM with sugar-dark theme)
+  #   - Desktop applications (Firefox, Chromium)
   #
   # Requirements:
   #   - Physical hardware with GPU
@@ -21,8 +21,8 @@
   #
   # Used by: Desktop workstations, development machines
   #
-  # Note: K3s (Kubernetes) is NOT included by default.
-  # To add K3s, import ../modules/nixos/services/k3s-nvidia.nix in your host config.
+  # Note: Service-specific configuration (K3s, NFS, etc.) should be
+  # imported directly in host configuration files.
 
   imports = [
     # Boot and kernel
@@ -40,8 +40,7 @@
 
     # Software and applications
     ../modules/nixos/desktop/programs.nix
-    ../modules/nixos/desktop/wayland-packages.nix
-    ../modules/nixos/services/k3s-nvidia.nix
+
     # Hardware utilities
     ../modules/nixos/hardware/hardware-tools.nix
   ];

@@ -6,7 +6,7 @@
 }:
 {
   # ZFS filesystem support for storage pools
-  # Optimized for 32GB RAM system with media server workloads
+  # Optimized for 64GB RAM system with media server and K3s workloads
   # Provides ZFS kernel modules, tools, automatic scrubbing, and snapshots
 
   # Enable ZFS support
@@ -18,18 +18,18 @@
   # ZFS is only officially supported on LTS kernels
   boot.kernelPackages = pkgs.linuxPackages;
 
-  # ARC (cache) tuning for 32GB RAM
+  # ARC (cache) tuning for 64GB RAM
   # Following rule: 2GB base + 1GB/TB storage = 2 + 3 = 5GB minimum
-  # Allocate 8GB max to ARC, leaving 24GB for k3s and services
+  # Allocate 16GB max to ARC, leaving 48GB for k3s and services
   boot.kernelParams = [
-    "zfs.zfs_arc_max=8589934592" # 8GB max
-    "zfs.zfs_arc_min=5368709120" # 5GB min (recommended for 3TB pool)
+    "zfs.zfs_arc_max=17179869184" # 16GB max (increased for 64GB RAM)
+    "zfs.zfs_arc_min=5368709120"  # 5GB min (recommended for 3TB pool)
   ];
 
   # Additional ZFS module parameters
   boot.extraModprobeConfig = ''
-    # ARC tuning for media server workload
-    options zfs zfs_arc_max=8589934592
+    # ARC tuning for media server workload (64GB RAM system)
+    options zfs zfs_arc_max=17179869184
     options zfs zfs_arc_min=5368709120
     # Prefetch tuning (good for sequential media reads)
     options zfs zfs_prefetch_disable=0

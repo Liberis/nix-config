@@ -1,0 +1,51 @@
+# SOPS configuration for secrets management
+# This file defines which keys can decrypt which secrets
+
+# Age public keys for each host
+# Generate with: age-keygen -y /var/lib/sops-nix/key.txt
+keys:
+  # Admin key (your personal age key for editing secrets)
+  # Generate with: age-keygen -o ~/.config/sops/age/keys.txt
+  # Get public key: age-keygen -y ~/.config/sops/age/keys.txt
+  - &admin YOUR_AGE_PUBLIC_KEY_HERE
+
+  # Host keys (generated on each system at /var/lib/sops-nix/key.txt)
+  # After deploying sops-nix, run on each host:
+  #   sudo age-keygen -y /var/lib/sops-nix/key.txt
+  - &jarvis AGE_PUBLIC_KEY_FOR_JARVIS
+  - &mainframe AGE_PUBLIC_KEY_FOR_MAINFRAME
+  - &akasha AGE_PUBLIC_KEY_FOR_AKASHA
+
+# Secret file configuration
+creation_rules:
+  # Default: all secrets encrypted with all keys
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *jarvis
+          - *mainframe
+          - *akasha
+
+  # Host-specific secrets
+  - path_regex: secrets/jarvis\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *jarvis
+
+  - path_regex: secrets/mainframe\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *mainframe
+
+  - path_regex: secrets/akasha\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *akasha
+
+# Encrypted suffix (optional)
+# Uncomment if you want to only encrypt specific fields in YAML
+# encrypted_suffix: _encrypted

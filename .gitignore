@@ -20,3 +20,13 @@ result-*
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets (sops-nix)
+# Only encrypted secrets.yaml should be committed
+# The .example file is safe to commit as a template
+secrets/*.dec
+secrets/*.yaml.dec
+secrets/key.txt
+secrets/keys.txt
+*.age
+.sops.pub

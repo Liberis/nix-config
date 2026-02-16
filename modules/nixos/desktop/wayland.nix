@@ -2,6 +2,16 @@
 {
   # Wayland compositor and portal configuration
   # Sets up XDG portals for desktop integration and session variables
+  #
+  # This module contains:
+  #   - XDG portals (wlr, gtk)
+  #   - System-level Wayland utilities (session management, locking, power)
+  #   - Wayland environment variables
+  #   - Seat management (seatd)
+  #   - Sway compositor configuration
+  #
+  # User-level Wayland packages (waybar, wofi, foot, etc.) are in:
+  #   - modules/home-manager/wayland.nix
 
   xdg.portal = {
     enable = true;
