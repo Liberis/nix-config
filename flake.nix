@@ -9,8 +9,6 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
-    sops-nix.url = "github:Mic92/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -19,7 +17,6 @@
       nixpkgs,
       home-manager,
       disko,
-      sops-nix,
       ...
     }:
     let
@@ -66,9 +63,6 @@
           modules = [
             # Disko for declarative disk management
             disko.nixosModules.disko
-
-            # Secrets management
-            sops-nix.nixosModules.sops
 
             # Base profile (common to all hosts)
             ./profiles/base.nix
@@ -133,9 +127,6 @@
           modules = [
             # Disko for declarative disk management
             disko.nixosModules.disko
-
-            # Secrets management
-            sops-nix.nixosModules.sops
 
             # Base profile (common to all hosts)
             ./profiles/base.nix

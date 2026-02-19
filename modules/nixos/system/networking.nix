@@ -11,6 +11,4 @@
     "192.168.99.1"        # Cloudflare fallback
   ];
 
-  # Prevent NetworkManager from overwriting DNS settings
-  networking.networkmanager.dns = "none";
 }
