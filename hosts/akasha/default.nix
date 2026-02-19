@@ -29,6 +29,35 @@
     ../../modules/nixos/services/democratic-csi.nix
   ];
 
+  # Secrets management
+  sops = {
+    defaultSopsFile = ../../secrets/secrets.yaml;
+    age = {
+      keyFile = "/var/lib/sops-nix/key.txt";
+      generateKey = true;
+    };
+    secrets = {
+      "democratic-csi/ssh-private-key" = {
+        mode = "0400";
+        owner = "democratic-csi";
+        group = "democratic-csi";
+        path = "/var/lib/democratic-csi/.ssh/id_ed25519";
+      };
+      "k3s/agent-token-akasha" = {
+        mode = "0400";
+        owner = "root";
+        group = "root";
+        path = "/var/lib/rancher/k3s/agent-token";
+      };
+    };
+  };
+
+  # Ensure democratic-csi user exists before secret is deployed
+  systemd.services.sops-install-secrets = {
+    after = [ "users.service" ];
+    wants = [ "users.service" ];
+  };
+
   # K3s agent configuration (worker node with storage)
   services.k3s = {
     enable = true;

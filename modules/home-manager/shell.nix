@@ -24,5 +24,12 @@
     # Terminal UI applications
     lazygit # Terminal UI for Git operations
     ncspot # Spotify terminal client
+    # Disk and file utilities
+    ncdu # NCurses disk usage analyzer
+    dust # Disk usage visualization in a tree view
+    dua # Interactive disk usage analyser and cleanup tool
+    zip
+    unzip
+    file # File type detection
   ];
 }

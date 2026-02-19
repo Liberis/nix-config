@@ -18,7 +18,6 @@
 
   imports = [
     # Boot
-    ../modules/nixos/hardware/boot.nix
 
     # Remote access
     ../modules/nixos/services/ssh.nix

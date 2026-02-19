@@ -40,11 +40,28 @@
     ../../modules/nixos/services/nfs.nix
   ];
 
+  # Secrets management
+  sops = {
+    defaultSopsFile = ../../secrets/secrets.yaml;
+    age = {
+      keyFile = "/var/lib/sops-nix/key.txt";
+      generateKey = true;
+    };
+    secrets = {
+      "k3s/agent-token-jarvis" = {
+        mode = "0400";
+        owner = "root";
+        group = "root";
+        path = "/var/lib/rancher/k3s/agent-token";
+      };
+    };
+  };
+
   # K3s agent configuration - connect to mainframe control plane
   services.k3s = {
     enable = true;
     role = "agent";
-    serverAddr = "https://192.168.10.10:6443"; # Connect to mainframe control plane
+    serverAddr = "https://192.168.10.11:6443"; # Connect to mainframe control plane
     tokenFile = "/var/lib/rancher/k3s/agent-token";
   };
 

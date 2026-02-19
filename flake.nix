@@ -19,6 +19,7 @@
       nixpkgs,
       home-manager,
       disko,
+      sops-nix,
       ...
     }:
     let
@@ -65,6 +66,9 @@
           modules = [
             # Disko for declarative disk management
             disko.nixosModules.disko
+
+            # Secrets management
+            sops-nix.nixosModules.sops
 
             # Base profile (common to all hosts)
             ./profiles/base.nix
@@ -129,6 +133,9 @@
           modules = [
             # Disko for declarative disk management
             disko.nixosModules.disko
+
+            # Secrets management
+            sops-nix.nixosModules.sops
 
             # Base profile (common to all hosts)
             ./profiles/base.nix

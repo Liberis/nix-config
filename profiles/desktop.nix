@@ -26,7 +26,6 @@
 
   imports = [
     # Boot and kernel
-    ../modules/nixos/hardware/boot.nix
     ../modules/nixos/hardware/kernel.nix
 
     # Graphics and display
