@@ -1,39 +1,35 @@
 {
   # =============================================================================
-  # Disko configuration for jarvis desktop
+  # Disko configuration for jarvis desktop - Fresh Install
   # =============================================================================
-  # ⚠️ WARNING: THIS FILE IS NOT USED FOR DUAL-BOOT INSTALLATION! ⚠️
+  # Hardware: AMD Ryzen 9 9900X, NVIDIA RTX 5070Ti, 64GB DDR5
   #
-  # This file is kept for reference only. The jarvis system uses dual-boot
-  # with Windows 11, which requires MANUAL partitioning during installation.
+  # Disk Layout:
+  #   - 1TB NVMe (nvme0n1): OS Drive
+  #     - ESP: 1GB (EFI boot)
+  #     - Swap: 32GB (suspend-to-disk with 64GB RAM)
+  #     - Root: ~930GB (BTRFS with subvolumes)
   #
-  # For dual-boot installation instructions, see:
-  #   - JARVIS_INSTALLATION_GUIDE.md
+  #   - 2TB NVMe (nvme1n1): Data Drive
+  #     - Data: 2TB (BTRFS for K3s storage, games, media)
   #
-  # This Disko config is only for:
-  #   - Single NixOS installation (no Windows)
-  #   - Complete wipe and fresh install
-  #   - Reference for partition layout
+  # Installation:
+  #   1. Boot NixOS installer
+  #   2. Run: sudo nix --experimental-features "nix-command flakes" run \
+  #           github:nix-community/disko -- --mode disko ./hosts/jarvis/disko.nix
+  #   3. Run: sudo nixos-install --flake .#jarvis
   #
-  # Current jarvis setup:
-  #   - Hardware: AMD Ryzen 9 9900X, NVIDIA RTX 5070Ti, 64GB DDR5
-  #   - 1TB NVMe: Windows C: (300GB) + Games D: (400GB) + NixOS (300GB)
-  #   - 2TB NVMe PCIe5: K3s Storage (2TB BTRFS)
-  #
-  # If you want to use Disko (single-OS only):
-  #   sudo nix run github:nix-community/disko -- \
-  #     --mode disko \
-  #     --arg disks '{ main = "/dev/nvme0n1"; }' \
-  #     /path/to/this/flake#jarvis
-  #
-  # IMPORTANT: This will DESTROY all data on the target disk!
+  # IMPORTANT: This will DESTROY all data on both target disks!
   # =============================================================================
 
   disko.devices = {
     disk = {
+      # =======================================================================
+      # OS Drive - 1TB NVMe
+      # =======================================================================
       main = {
         type = "disk";
-        device = "/dev/nvme0n1"; # Adjust to your NVMe device (check with lsblk)
+        device = "/dev/nvme0n1";
         content = {
           type = "gpt";
           partitions = {
@@ -53,19 +49,17 @@
               };
             };
 
-            # Swap partition (16GB - smaller due to 64GB RAM)
-            # Allows suspend-to-disk and handles memory pressure
-            # Note: For dual-boot, swap is created manually as partition 5
+            # Swap partition (32GB for 64GB RAM - allows hibernate)
             swap = {
               priority = 2;
-              size = "16G";
+              size = "32G";
               content = {
                 type = "swap";
-                randomEncryption = true; # Encrypt swap for security
+                randomEncryption = true;
               };
             };
 
-            # BTRFS root partition with subvolumes
+            # BTRFS root partition with subvolumes (~930GB)
             root = {
               priority = 3;
               size = "100%";
@@ -73,7 +67,7 @@
                 type = "btrfs";
                 extraArgs = [
                   "-f"
-                  "-L nixos"
+                  "-L" "nixos"
                 ];
                 subvolumes = {
                   # Root subvolume - OS files
@@ -85,7 +79,7 @@
                     ];
                   };
 
-                  # Home subvolume - user files, documents, downloads
+                  # Home subvolume - user files, documents, configs
                   "@home" = {
                     mountpoint = "/home";
                     mountOptions = [
@@ -94,16 +88,16 @@
                     ];
                   };
 
-                  # Nix store subvolume - packages
+                  # Nix store subvolume
                   "@nix" = {
                     mountpoint = "/nix";
                     mountOptions = [
                       "noatime"
-                      "nodatacow" # Disable CoW for better performance
+                      "nodatacow"
                     ];
                   };
 
-                  # Logs subvolume - system logs
+                  # Logs subvolume
                   "@var-log" = {
                     mountpoint = "/var/log";
                     mountOptions = [
@@ -112,16 +106,16 @@
                     ];
                   };
 
-                  # Rancher subvolume - K3s worker data
+                  # K3s worker data
                   "@rancher" = {
                     mountpoint = "/var/lib/rancher";
                     mountOptions = [
                       "noatime"
-                      "nodatacow" # Disable CoW for k3s performance
+                      "nodatacow"
                     ];
                   };
 
-                  # Snapshots subvolume - for backups
+                  # Snapshots for backups
                   "@snapshots" = {
                     mountpoint = "/.snapshots";
                     mountOptions = [
@@ -129,16 +123,67 @@
                       "noatime"
                     ];
                   };
+                };
+              };
+            };
+          };
+        };
+      };
 
-                  # Optional: Games subvolume (if you store games on system drive)
-                  # Uncomment if needed
-                  # "@games" = {
-                  #   mountpoint = "/home/games";
-                  #   mountOptions = [
-                  #     "noatime"
-                  #     "nodatacow"  # Better for large game files
-                  #   ];
-                  # };
+      # =======================================================================
+      # Data Drive - 2TB NVMe
+      # =======================================================================
+      data = {
+        type = "disk";
+        device = "/dev/nvme1n1";
+        content = {
+          type = "gpt";
+          partitions = {
+            # Single BTRFS partition for all data (~2TB)
+            data = {
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = [
+                  "-f"
+                  "-L" "data"
+                ];
+                subvolumes = {
+                  # K3s persistent volume storage (Longhorn, etc.)
+                  "@k3s-storage" = {
+                    mountpoint = "/mnt/k3s-storage";
+                    mountOptions = [
+                      "noatime"
+                      "compress=zstd"
+                    ];
+                  };
+
+                  # Games storage
+                  "@games" = {
+                    mountpoint = "/mnt/games";
+                    mountOptions = [
+                      "noatime"
+                      "nodatacow"
+                    ];
+                  };
+
+                  # Media storage (optional - for videos, music, etc.)
+                  "@media" = {
+                    mountpoint = "/mnt/media";
+                    mountOptions = [
+                      "noatime"
+                      "compress=zstd"
+                    ];
+                  };
+
+                  # Downloads (large files, ISOs, etc.)
+                  "@downloads" = {
+                    mountpoint = "/mnt/downloads";
+                    mountOptions = [
+                      "noatime"
+                      "compress=zstd"
+                    ];
+                  };
                 };
               };
             };

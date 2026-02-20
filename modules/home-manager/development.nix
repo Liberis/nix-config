@@ -6,15 +6,59 @@
 }:
 {
   home.packages = with pkgs; [
-    # Programming language toolchains
-    go # The Go programming language compiler and tools
-    rustc # The Rust compiler
-    cargo # Rust package manager
-    gcc # GNU Compiler Collection (C/C++)
-    gnumake # GNU Make build automation
+    # ===================
+    # Programming Languages
+    # ===================
+    # Go
+    go
+    gopls # Go language server
 
-    # Infrastructure and cloud CLIs
-    terraform # HashiCorp Terraform for infrastructure provisioning
-    azure-cli # Microsoft Azure CLI
+    # Rust
+    rustc
+    cargo
+    rust-analyzer
+
+    # C/C++
+    gcc
+    gnumake
+    cmake
+    ninja
+    gdb
+
+    # Python
+    python3
+    python3Packages.pip
+    python3Packages.virtualenv
+    poetry
+    ruff # Fast Python linter
+
+    # Node.js
+    nodejs
+    pnpm
+    nodePackages.typescript
+    nodePackages.typescript-language-server
+
+    # ===================
+    # Build Tools
+    # ===================
+    pkg-config
+    autoconf
+    automake
+    libtool
+
+    # ===================
+    # Infrastructure & Cloud
+    # ===================
+    terraform
+    azure-cli
+    awscli2
+    oci-cli # Oracle Cloud Infrastructure CLI
+
+    # ===================
+    # Debugging & Analysis
+    # ===================
+    strace
+    ltrace
+    valgrind
   ];
 }

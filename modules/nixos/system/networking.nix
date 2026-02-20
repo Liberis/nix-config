@@ -6,9 +6,9 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = true;
 
-  # DNS configuration - Pi-hole as primary, Cloudflare as fallback
+  # DNS configuration
   networking.nameservers = [
-    "192.168.99.1"        # Cloudflare fallback
+    "192.168.99.1"
   ];
 
 }

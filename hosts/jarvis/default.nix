@@ -1,105 +1,78 @@
 { config, pkgs, lib, ... }:
 {
-  # Desktop Workstation - Gaming & Development Machine (Dual-boot with Windows 11)
+  # Desktop Workstation - Gaming & Development Machine
   # Hardware: AMD Ryzen 9 9900X, NVIDIA RTX 5070Ti, 64GB DDR5
   # Storage:
-  #   - 1TB NVMe (/dev/nvme0n1):
-  #     - Partition 1 (100MB): EFI (shared with Windows)
-  #     - Partition 3 (300GB): Windows C:
-  #     - Partition 4 (400GB): Games (NTFS, shared with Windows)
-  #     - Partition 5 (16GB): NixOS Swap
-  #     - Partition 6 (284GB): NixOS Root (BTRFS with subvolumes)
-  #   - 2TB NVMe PCIe5 (/dev/nvme1n1):
-  #     - Partition 1 (2TB): K3s Storage (BTRFS)
-  #
-  # Role: Desktop workstation and Kubernetes GPU worker
-  #   - Dual-boot with Windows 11 (Windows installed first)
-  #   - Full Wayland desktop environment
-  #   - K3s agent with NVIDIA GPU support
-  #   - NFS client for accessing shared storage from akasha
-  #   - Dedicated 2TB K3s storage for persistent volumes
-  #   - Shared 400GB NTFS partition for games (accessible from both OSes)
+  #   - 1TB NVMe (/dev/nvme0n1): OS Drive
+  #     - ESP (1GB): EFI boot
+  #     - Swap (32GB): Encrypted swap
+  #     - Root (~930GB): BTRFS with subvolumes
+  #   - 2TB NVMe (/dev/nvme1n1): Data Drive
+  #     - Data (2TB): BTRFS (@k3s-storage, @games, @media, @downloads)
+
   imports = [
-    # Hardware configuration for dual-boot setup
-    # NOTE: For dual-boot with Windows, we use hardware-configuration.nix
-    # instead of disko.nix (manual partitioning required)
-    # ./disko.nix  # Only use for fresh single-OS install
-    ./hardware-configuration.nix  # Generated during NixOS installation
+    # ===================
+    # Disk Configuration
+    # ===================
+    ./disko.nix
 
-    # Hardware-specific modules
-    ../../modules/nixos/hardware/cpu-amd.nix # AMD Ryzen 9 9900X
-    ../../modules/nixos/hardware/gpu-nvidia.nix # NVIDIA RTX 5070Ti
+    # ===================
+    # Base System Modules
+    # ===================
+    ../../modules/nixos/system/locale.nix
+    ../../modules/nixos/system/fonts.nix
+    ../../modules/nixos/system/users.nix
+    ../../modules/nixos/system/networking.nix
+    ../../modules/nixos/system/system-packages.nix
+    ../../modules/nixos/system/base.nix
+    ../../modules/nixos/filesystem/btrfs-quotas.nix
+    ../../modules/nixos/utilities/network-tools.nix
 
-    # K3s with NVIDIA GPU support for container workloads
-    ../../modules/nixos/services/k3s-nvidia.nix
+    # ===================
+    # Hardware Modules
+    # ===================
+    ../../modules/nixos/hardware/cpu-amd.nix
+    ../../modules/nixos/hardware/gpu-nvidia.nix
+    ../../modules/nixos/hardware/kernel.nix
+    ../../modules/nixos/hardware/audio.nix
+    ../../modules/nixos/hardware/bluetooth.nix
+    ../../modules/nixos/hardware/hardware-tools.nix
 
-    # Container orchestration - K3s Server
-    ../../modules/nixos/services/k3s-base.nix
-    ../../modules/nixos/services/vpn.nix
-    # NFS server for sharing ZFS datasets
-    ../../modules/nixos/services/nfs.nix
+    # ===================
+    # Desktop Environment
+    # ===================
+    ../../modules/nixos/desktop/wayland.nix
+    ../../modules/nixos/desktop/display-manager.nix
+    ../../modules/nixos/desktop/programs.nix
+    ../../modules/nixos/desktop/gaming.nix
 
-    # Prometheus exporters for hardware monitoring
+    # ===================
+    # Services
+    # ===================
+    ../../modules/nixos/services/k3s-agent-nvidia.nix
     ../../modules/nixos/services/smartctl-exporter.nix
-    ../../modules/nixos/services/zfs-exporter.nix
   ];
 
   # K3s agent configuration - connect to mainframe control plane
   services.k3s = {
     enable = true;
     role = "agent";
-    serverAddr = "https://192.168.10.11:6443"; # Connect to mainframe control plane
+    serverAddr = "https://192.168.10.11:6443";
     tokenFile = "/var/lib/rancher/k3s/agent-token";
   };
 
-  # Dual-boot configuration with Windows 11
+  # Boot loader
   boot.loader = {
-    systemd-boot.enable = true;
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot"; # Shared EFI partition with Windows
+    grub = {
+      enable = true;
+      efiSupport = true;
+      device = "nodev";
     };
-    timeout = 5; # Show boot menu for 5 seconds to choose OS
+    efi.canTouchEfiVariables = true;
   };
 
-  # Use local time for hardware clock (Windows compatibility)
-  # Windows uses local time by default, while Linux uses UTC
-  # This prevents time desync when switching between OSes
-  time.hardwareClockInLocalTime = true;
-
-  # Filesystem support for BTRFS and NTFS
-  boot.supportedFilesystems = [ "btrfs" "ntfs" ];
-
-  # Mount 400GB Games partition (NTFS, shared with Windows)
-  # Appears as D: in Windows, /mnt/games in NixOS
-  fileSystems."/mnt/games" = {
-    device = "/dev/disk/by-label/Games"; # Or /dev/nvme0n1p4
-    fsType = "ntfs";
-    options = [
-      "rw" # Read-write access
-      "uid=1000" # Your user ID (adjust if different)
-      "gid=100" # Users group
-      "dmask=022" # Directory permissions (755)
-      "fmask=133" # File permissions (644)
-    ];
-  };
-
-  # Mount 2TB K3s storage drive (BTRFS)
-  # Used for K3s persistent volumes, Longhorn storage, etc.
-  fileSystems."/mnt/k3s-storage" = {
-    device = "/dev/disk/by-label/k3s-storage"; # Or /dev/nvme1n1p1
-    fsType = "btrfs";
-    options = [
-      "noatime" # Don't update access times
-      "compress=zstd" # Enable compression
-    ];
-  };
-
-  # System packages for NTFS and dual-boot management
-  environment.systemPackages = with pkgs; [
-    ntfs3g # NTFS filesystem driver
-    efibootmgr # Manage UEFI boot entries
-  ];
+  # Filesystem support
+  boot.supportedFilesystems = [ "btrfs" ];
 
   # Hardware modules for AMD Ryzen 9900X
   boot.initrd.availableKernelModules = [
@@ -113,24 +86,24 @@
 
   boot.kernelModules = [ "kvm-amd" ];
 
-  # Enable redistributable firmware (includes AMD microcode)
   hardware.enableRedistributableFirmware = true;
 
-  # BTRFS quotas to prevent any subvolume from filling the disk
-  # Total available: ~284GB BTRFS partition (dual-boot setup)
+  # System packages
+  environment.systemPackages = with pkgs; [
+    efibootmgr
+  ];
+
+  # BTRFS quotas - ~930GB OS partition
   services.btrfs-quotas = {
     enable = true;
     rootDevice = "/";
     quotas = {
-      "@root" = "60G";       # OS files - desktop needs more for GUI apps
-      "@home" = "100G";      # User files - documents, downloads, configs
-      "@nix" = "80G";        # Nix store - desktop packages (GUI, games, dev tools)
-      "@var-log" = "10G";    # Logs - desktop usage is lighter
-      "@rancher" = "20G";    # K3s worker data - GPU workloads use K3s storage
-      "@snapshots" = "14G";  # BTRFS snapshots for backups
+      "@root" = "100G";
+      "@home" = "400G";
+      "@nix" = "200G";
+      "@var-log" = "20G";
+      "@rancher" = "50G";
+      "@snapshots" = "160G";
     };
-    # Total allocated: 284G
-    # Note: Games stored on separate 400GB NTFS partition (/mnt/games)
-    # Note: K3s volumes stored on separate 2TB drive (/mnt/k3s-storage)
   };
 }

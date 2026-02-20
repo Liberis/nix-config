@@ -24,6 +24,7 @@
     # Terminal UI applications
     lazygit # Terminal UI for Git operations
     ncspot # Spotify terminal client
+    fastfetch # System information display
     # Disk and file utilities
     ncdu # NCurses disk usage analyzer
     dust # Disk usage visualization in a tree view

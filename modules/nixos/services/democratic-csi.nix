@@ -196,17 +196,10 @@ in
 
         # Chroot to home directory (restricts file system access)
         ChrootDirectory /var/lib/democratic-csi
-
-        # Additional security
-        PermitUserEnvironment no
-        AcceptEnv none
     '';
 
-    # Create wrapper scripts directory
-    environment.systemPackages = [
-      zfsWrapper
-      filePermWrapper
-    ];
+    # Wrapper scripts are referenced directly in sudo rules
+    # No need to add to systemPackages
 
     # Set restrictive permissions on home directory
     systemd.tmpfiles.rules = [
