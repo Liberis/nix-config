@@ -28,6 +28,8 @@ let
       case "$arg" in
         create|destroy|snapshot|clone|list|get|set|send|receive|rollback|rename|mount|unmount) continue ;;
       esac
+      # Skip property assignments (key=value)
+      [[ "$arg" == *=* ]] && continue
       # Any dataset argument must be under tank/k8s
       if [[ "$arg" == */* ]] && [[ "$arg" != tank/k8s* ]]; then
         echo "Error: zfs only allowed on tank/k8s/* datasets, got: $arg" >&2
@@ -99,6 +101,12 @@ in
           { command = "/etc/democratic-csi/chown *"; options = [ "NOPASSWD" ]; }
           { command = "/etc/democratic-csi/chmod *"; options = [ "NOPASSWD" ]; }
           { command = "/etc/democratic-csi/mkdir *"; options = [ "NOPASSWD" ]; }
+          { command = "${pkgs.coreutils}/bin/chown *"; options = [ "NOPASSWD" ]; }
+          { command = "${pkgs.coreutils}/bin/chmod *"; options = [ "NOPASSWD" ]; }
+          { command = "${pkgs.coreutils}/bin/mkdir *"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/chown *"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/chmod *"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/mkdir *"; options = [ "NOPASSWD" ]; }
         ];
       }
     ];
