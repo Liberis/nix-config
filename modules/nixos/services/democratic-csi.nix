@@ -94,11 +94,11 @@ in
       {
         users = [ "democratic-csi" ];
         commands = [
-          { command = "${restrictedZfs} *"; options = [ "NOPASSWD" ]; }
-          { command = "${restrictedZpool} *"; options = [ "NOPASSWD" ]; }
-          { command = "${restrictedChown} *"; options = [ "NOPASSWD" ]; }
-          { command = "${restrictedChmod} *"; options = [ "NOPASSWD" ]; }
-          { command = "${restrictedMkdir} *"; options = [ "NOPASSWD" ]; }
+          { command = "/etc/democratic-csi/zfs *"; options = [ "NOPASSWD" ]; }
+          { command = "/etc/democratic-csi/zpool *"; options = [ "NOPASSWD" ]; }
+          { command = "/etc/democratic-csi/chown *"; options = [ "NOPASSWD" ]; }
+          { command = "/etc/democratic-csi/chmod *"; options = [ "NOPASSWD" ]; }
+          { command = "/etc/democratic-csi/mkdir *"; options = [ "NOPASSWD" ]; }
         ];
       }
     ];
