@@ -9,6 +9,10 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
     gamescopeSession.enable = true;
+    # Extra compatibility tools and env vars for xwayland-satellite
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
+    ];
   };
 
   # Enable Gamemode for performance optimization
@@ -47,4 +51,15 @@
     vulkan-tools
     vulkan-loader
   ];
+
+  # Gaming-specific environment variables for XWayland and Steam
+  environment.sessionVariables = {
+    # Steam/Proton optimizations
+    STEAM_FORCE_DESKTOPUI_SCALING = "1.25"; # Match your AW2724DM scaling
+    # Enable MangoHud for all Vulkan games
+    MANGOHUD = "1";
+    # NVIDIA-specific optimizations
+    __GL_GSYNC_ALLOWED = "1";
+    __GL_VRR_ALLOWED = "1";
+  };
 }

@@ -107,6 +107,8 @@ environment {
     QT_FONT_DPI "96"
     GDK_SCALE "1"
     GDK_DPI_SCALE "1"
+    // XWayland support for Steam and X11 apps
+    DISPLAY ":0"
 }
 
 // WINDOW RULES

@@ -35,6 +35,7 @@
     playerctl # Media player control
     jq # JSON processor (used by sway scripts)
     xwayland # X11 compatibility layer for Wayland (required for Steam and other X11 apps)
+    xwayland-satellite # On-demand XWayland rootful server for Wayland compositors
   ];
 
   # Wayland-specific environment variables

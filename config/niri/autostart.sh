@@ -12,6 +12,15 @@ systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT
 # This prevents waybar portal timeout errors
 sleep 1
 
+# XWAYLAND SUPPORT
+# ============================================
+# Start xwayland-satellite for X11 app support (Steam, etc.)
+pkill -x xwayland-satellite 2>/dev/null || true
+sleep 0.2
+xwayland-satellite :0 &
+# Wait for xwayland-satellite to be ready
+sleep 1
+
 # DISPLAY MANAGEMENT
 # ============================================
 # Monitors are configured natively in config.kdl (no need for way-displays)
