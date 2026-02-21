@@ -21,10 +21,9 @@ in
   # Git configuration with Conventional Commits enforcement
   programs.git = {
     enable = true;
-    userName = cfg.user.fullName;
-    userEmail = cfg.user.email;
-
-    extraConfig = {
+    settings = {
+      user.name = cfg.user.fullName;
+      user.email = cfg.user.email;
       init.defaultBranch = "main";
       commit.template = "~/.config/git/commit-template";
       core.hooksPath = "~/.config/git/hooks";
@@ -37,6 +36,29 @@ in
     source = ../../config/git/hooks/commit-msg;
     executable = true;
   };
+
+  # SSH client configuration with agent auto-loading
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    matchBlocks = {
+      "*" = {
+        addKeysToAgent = "yes";
+        identityFile = "~/.ssh/id_ed25519";
+      };
+      "github.com" = {
+        hostname = "github.com";
+        user = "git";
+      };
+      "gitlab.com" = {
+        hostname = "gitlab.com";
+        user = "git";
+      };
+    };
+  };
+
+  # Auto-start ssh-agent via systemd user service
+  services.ssh-agent.enable = true;
 
   # Core TUI programs - enabled for all users
   programs.neovim.enable = true;

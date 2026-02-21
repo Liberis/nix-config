@@ -7,9 +7,6 @@
   # Web browser
   programs.firefox.enable = true;
   programs.chromium.enable = true;
-  # River compositor (Wayland window manager)
-  programs.river.enable = true;
-
   # Niri compositor (scrolling tiling Wayland compositor)
   programs.niri.enable = true;
 
