@@ -1,0 +1,31 @@
+
+# <type>(<scope>): <subject>
+
+
+# --- RULES -----------------------------------------------------------
+# Type MUST be one of:
+#   feat:     A new feature
+#   fix:      A bug fix
+#   docs:     Documentation only changes
+#   style:    Formatting, semicolons, etc (no code change)
+#   refactor: Code change that neither fixes a bug nor adds a feature
+#   perf:     Performance improvement
+#   test:     Adding or updating tests
+#   build:    Build system or dependencies (nix, npm, cargo)
+#   ci:       CI/CD configuration
+#   chore:    Maintenance tasks (tooling, configs)
+#   revert:   Reverts a previous commit
+#
+# Scope is optional: module, file, or area affected
+#   Examples: nvim, hyprland, k3s, shell, git
+#
+# Subject: imperative mood, lowercase, no period, max 50 chars
+#   Good:  "add OAuth2 login support"
+#   Bad:   "Added OAuth2 login support."
+#
+# Body (optional): explain WHAT and WHY, wrap at 72 chars
+#
+# Footer (optional): reference issues, BREAKING CHANGE
+#   BREAKING CHANGE: <description>
+#   Closes #123
+# ----------------------------------------------------------------------

@@ -16,19 +16,21 @@ return {
         config = function()
             require("nvim-treesitter").setup({})
 
-            -- Install missing parsers on startup
-            local installed = require("nvim-treesitter.config").get_installed()
-            local installed_set = {}
-            for _, p in ipairs(installed) do installed_set[p] = true end
-            local to_install = {}
-            for _, p in ipairs(parsers) do
-                if not installed_set[p] then
-                    table.insert(to_install, p)
+            -- Install missing parsers in the background after UI loads
+            vim.defer_fn(function()
+                local installed = require("nvim-treesitter.config").get_installed()
+                local installed_set = {}
+                for _, p in ipairs(installed) do installed_set[p] = true end
+                local to_install = {}
+                for _, p in ipairs(parsers) do
+                    if not installed_set[p] then
+                        table.insert(to_install, p)
+                    end
                 end
-            end
-            if #to_install > 0 then
-                require("nvim-treesitter.install").install(to_install)
-            end
+                if #to_install > 0 then
+                    require("nvim-treesitter.install").install(to_install)
+                end
+            end, 500)
 
             -- Enable treesitter highlighting and indentation for all buffers
             vim.api.nvim_create_autocmd("FileType", {

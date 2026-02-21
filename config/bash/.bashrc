@@ -1,100 +1,39 @@
 # ~/.bashrc
 
 # NixOS flake directory
-export FLAKE_DIR="${FLAKE_DIR:-$HOME/repos/dotfiles/nix-flakes}"
+export FLAKE_DIR="${FLAKE_DIR:-$HOME/repos/nix-config}"
 export PATH="$FLAKE_DIR/scripts:$PATH"
-
-# Tmux session management
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Enable bash completion if available
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+# Auto-start tmux: attach to existing session or create a new one
+if [ -z "$TMUX" ] && command -v tmux &>/dev/null; then
+    exec tmux new-session -A -s main
 fi
-
-tmux_session() {
-    SESSION_NAME="session"
-
-    if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-        # Define windows in the format "window_name:command"
-        # Leave command empty if you want a plain shell.
-        windows=(
-            "term:clear"
-            "nvim:nvim"
-            "yazi:yazi"
-            "k8s:k9s"
-            "logs:"
-            "git:"
-            "htop:htop"
-            "azdotui:azdotui"
-        )
-
-    # Create the first window using new-session.
-    IFS=':' read -r first_win first_cmd <<< "${windows[0]}"
-    if [ -n "$first_cmd" ]; then
-        tmux new-session -d -s "$SESSION_NAME" -n "$first_win" "$SHELL" -c "$first_cmd; clear; exec $SHELL"
-    else
-        tmux new-session -d -s "$SESSION_NAME" -n "$first_win"
-    fi
-
-    # Iterate over the remaining window definitions.
-    for win in "${windows[@]:1}"; do
-        IFS=':' read -r win_name win_cmd <<< "$win"
-        if [ -n "$win_cmd" ]; then
-            tmux new-window -t "$SESSION_NAME" -n "$win_name" "$SHELL" -c "$win_cmd; clear; exec $SHELL"
-        else
-            tmux new-window -t "$SESSION_NAME" -n "$win_name"
-        fi
-    done
-    fi
-
-    tmux select-window -t "$SESSION_NAME:term"
-    tmux attach-session -t "$SESSION_NAME"
-}
-
-
 
 # History settings
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoredups:ignorespace
 shopt -s histappend
-PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
 
-# Check if inside tmux, if not attach or start a session
 # Environment variables
 export EDITOR='nvim'
 export VISUAL='nvim'
-
 
 # Alias definitions
 alias vi='nvim'
 alias vim='nvim'
 alias v='nvim'
 alias cat='bat -p'
-alias r='ranger'
 
-# Pacman aliases
-#alias pacman='sudo pacman'
-#alias update='sudo pacman -Syu'
-#alias install='sudo pacman -S'
-#alias remove='sudo pacman -Rns'
-#alias search='pacman -Ss'
-
-# Yay (AUR helper) aliases
-#alias yay='yay'
-#alias aurinstall='yay -S'
-#alias aurremove='yay -Rns'
-#alias aursearch='yay -Ss'
-
-# Directory listing aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# Directory listing aliases (using eza)
+alias ls='eza'
+alias ll='eza -alF'
+alias la='eza -a'
+alias l='eza -F'
+alias lt='eza --tree --level=2'
 
 # Navigation aliases
 alias ..='cd ..'
@@ -104,8 +43,6 @@ alias .....='cd ../../../..'
 
 # Grep with color
 alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
 
 # Docker aliases
 alias dps='docker ps'
@@ -141,20 +78,19 @@ alias gp='git push'
 alias gst='git status'
 alias gss='git status -s'
 alias gcl='git clone'
+alias lg='lazygit'
 
-# Tmux alias
-alias tmux='tmux_session'
-alias t='tmux'
-alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
+# Yazi with directory tracking
 yazi_cd() {
     local tmp_file="/tmp/yazi-last-dir"
-    yazi --cwd-file="$tmp_file"
+    command yazi --cwd-file="$tmp_file"
     if [ -f "$tmp_file" ]; then
         cd "$(cat "$tmp_file")" || return
     fi
 }
-alias yazi=yazi_cd
-alias ranger=yazi_cd
+alias yazi='yazi_cd'
+alias r='yazi_cd'
+
 # Function to extract archives
 extract() {
     if [ -f "$1" ] ; then
@@ -182,12 +118,9 @@ mcd () {
     mkdir -p "$1" && cd "$1";
 }
 
-# Enable colors for ls and grep
-export CLICOLOR=1
-export LSCOLORS=GxFxCxDxBxegedabagaced
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
-# Add local bin to PATH if needed
-export PATH="$HOME/.local/bin:/home/liberis/.cargo/bin:$PATH"
 # Function to parse Git branch
 parse_git_branch() {
     local branch
@@ -198,6 +131,7 @@ parse_git_branch() {
 # Function to get exit status of last command
 prompt_command() {
     EXIT_STATUS=$?
+    history -a
 }
 
 PROMPT_COMMAND=prompt_command
@@ -215,7 +149,6 @@ BLUE="\[\e[0;34m\]"
 MAGENTA="\[\e[0;35m\]"
 CYAN="\[\e[0;36m\]"
 WHITE="\[\e[0;37m\]"
-
 
 # Construct the prompt
 PS1+="${BOLD}${GREEN}\u@\h "            # Username@Hostname

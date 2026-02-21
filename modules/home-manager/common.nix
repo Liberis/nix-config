@@ -18,6 +18,26 @@ in
   home.stateVersion = cfg.system.stateVersion;
   programs.home-manager.enable = true;
 
+  # Git configuration with Conventional Commits enforcement
+  programs.git = {
+    enable = true;
+    userName = cfg.user.fullName;
+    userEmail = cfg.user.email;
+
+    extraConfig = {
+      init.defaultBranch = "main";
+      commit.template = "~/.config/git/commit-template";
+      core.hooksPath = "~/.config/git/hooks";
+      pull.rebase = true;
+    };
+  };
+
+  xdg.configFile."git/commit-template".source = ../../config/git/commit-template;
+  xdg.configFile."git/hooks/commit-msg" = {
+    source = ../../config/git/hooks/commit-msg;
+    executable = true;
+  };
+
   # Core TUI programs - enabled for all users
   programs.neovim.enable = true;
   programs.tmux.enable = true;

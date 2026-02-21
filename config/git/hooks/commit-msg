@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+#
+# Conventional Commits validation hook
+# Enforces: <type>(<scope>): <subject>  or  <type>: <subject>
+#
+
+commit_msg_file="$1"
+commit_msg=$(head -1 "$commit_msg_file")
+
+# Allow merge commits
+if echo "$commit_msg" | grep -qE "^Merge "; then
+  exit 0
+fi
+
+# Allow revert commits
+if echo "$commit_msg" | grep -qE "^Revert \""; then
+  exit 0
+fi
+
+# Allow fixup/squash commits (used during interactive rebase)
+if echo "$commit_msg" | grep -qE "^(fixup|squash)! "; then
+  exit 0
+fi
+
+# Conventional Commits pattern: type(optional-scope): subject
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9_. /-]+\))?(!)?: .{1,}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "  INVALID COMMIT MESSAGE"
+  echo "  ──────────────────────────────────────────────────"
+  echo "  Your message:  $commit_msg"
+  echo ""
+  echo "  Expected format:"
+  echo "    <type>(<scope>): <subject>"
+  echo ""
+  echo "  Valid types:"
+  echo "    feat fix docs style refactor perf test build ci chore revert"
+  echo ""
+  echo "  Examples:"
+  echo "    feat(nvim): add treesitter configuration"
+  echo "    fix: correct hyprland keybinding conflict"
+  echo "    chore(flake): update flake.lock"
+  echo ""
+  exit 1
+fi
+
+# Check subject length (first line should be <= 72 chars)
+if [ ${#commit_msg} -gt 72 ]; then
+  echo ""
+  echo "  COMMIT MESSAGE TOO LONG"
+  echo "  ──────────────────────────────────────────────────"
+  echo "  First line is ${#commit_msg} characters (max 72)."
+  echo "  Move details to the commit body instead."
+  echo ""
+  exit 1
+fi
+
+# Check that subject doesn't end with a period
+if echo "$commit_msg" | grep -qE "\.$"; then
+  echo ""
+  echo "  NO TRAILING PERIOD"
+  echo "  ──────────────────────────────────────────────────"
+  echo "  The subject line should not end with a period."
+  echo ""
+  exit 1
+fi

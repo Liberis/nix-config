@@ -7,7 +7,6 @@
 {
   home.packages = with pkgs; [
     # Shell enhancements
-    starship # Modern shell prompt
     zsh # Z shell
     detox
     # Modern CLI replacements
