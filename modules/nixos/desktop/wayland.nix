@@ -34,6 +34,7 @@
     wlrctl # Window management for wlroots compositors
     playerctl # Media player control
     jq # JSON processor (used by sway scripts)
+    xwayland # X11 compatibility layer for Wayland (required for Steam and other X11 apps)
   ];
 
   # Wayland-specific environment variables

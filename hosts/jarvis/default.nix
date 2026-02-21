@@ -50,7 +50,6 @@
     # Services
     # ===================
     ../../modules/nixos/services/k3s-agent-nvidia.nix
-    ../../modules/nixos/services/smartctl-exporter.nix
   ];
 
   # K3s agent configuration - connect to mainframe control plane
