@@ -42,7 +42,9 @@ output "Dell Inc. DELL P2719H FDS0R83" {
 
 // Right monitor: Dell AW2724DM (2K, 1.25 scale, 165Hz)
 output "Dell Inc. AW2724DM 4P02JV3" {
-    mode "2560x1440@165"
+// Force the high refresh rate found in your output
+    mode "2560x1440@164.958"
+    variable-refresh-rate
     scale 1.25
     position x=1920 y=0
 }

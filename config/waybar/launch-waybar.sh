@@ -6,7 +6,11 @@ pkill -x waybar 2>/dev/null || true
 sleep 0.2
 
 # Detect which compositor is running
-if [ -n "$SWAYSOCK" ]; then
+if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
+    # Running Hyprland
+    WAYBAR_CONFIG="$HOME/.config/waybar/config-hyprland"
+    echo "Launching waybar for Hyprland"
+elif [ -n "$SWAYSOCK" ]; then
     # Running Sway
     WAYBAR_CONFIG="$HOME/.config/waybar/config-sway"
     echo "Launching waybar for Sway"
@@ -18,6 +22,10 @@ elif pgrep -x niri >/dev/null 2>&1; then
     # Running Niri (fallback detection)
     WAYBAR_CONFIG="$HOME/.config/waybar/config-niri"
     echo "Launching waybar for Niri"
+elif pgrep -x Hyprland >/dev/null 2>&1; then
+    # Running Hyprland (fallback detection)
+    WAYBAR_CONFIG="$HOME/.config/waybar/config-hyprland"
+    echo "Launching waybar for Hyprland"
 elif pgrep -x river >/dev/null 2>&1; then
     # Running River
     WAYBAR_CONFIG="$HOME/.config/waybar/config-river"

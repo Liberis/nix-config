@@ -49,10 +49,13 @@
   #   /dev/nvme0n1p4 → swap (32GB)
   #   /dev/nvme0n1p5 → / (BTRFS with subvolumes)
 
+  # ===========================================================================
+  # OS Drive - 1TB NVMe (nvme0n1)
+  # ===========================================================================
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@root" "compress=zstd" "noatime" ];
+    options = [ "subvol=@root" "compress=zstd" "noatime" "discard=async" ];
   };
 
   fileSystems."/boot" = {
@@ -64,31 +67,58 @@
   fileSystems."/home" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@home" "compress=zstd" "noatime" ];
+    options = [ "subvol=@home" "compress=zstd" "noatime" "discard=async" ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@nix" "noatime" "nodatacow" ];
+    options = [ "subvol=@nix" "noatime" "nodatacow" "discard=async" ];
   };
 
   fileSystems."/var/log" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@var-log" "compress=zstd" "noatime" ];
+    options = [ "subvol=@var-log" "compress=zstd" "noatime" "discard=async" ];
   };
 
   fileSystems."/var/lib/rancher" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@rancher" "noatime" "nodatacow" ];
+    options = [ "subvol=@rancher" "noatime" "nodatacow" "discard=async" ];
   };
 
   fileSystems."/.snapshots" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";
-    options = [ "subvol=@snapshots" "compress=zstd" "noatime" ];
+    options = [ "subvol=@snapshots" "compress=zstd" "noatime" "discard=async" ];
+  };
+
+  # ===========================================================================
+  # Data Drive - 2TB NVMe (nvme1n1)
+  # ===========================================================================
+  fileSystems."/mnt/k3s-storage" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "btrfs";
+    options = [ "subvol=@k3s-storage" "noatime" "compress=zstd" "discard=async" ];
+  };
+
+  fileSystems."/mnt/games" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "btrfs";
+    options = [ "subvol=@games" "noatime" "nodatacow" "discard=async" ];
+  };
+
+  fileSystems."/mnt/media" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "btrfs";
+    options = [ "subvol=@media" "noatime" "compress=zstd" "discard=async" ];
+  };
+
+  fileSystems."/mnt/downloads" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "btrfs";
+    options = [ "subvol=@downloads" "noatime" "compress=zstd" "discard=async" ];
   };
 
   # Swap device (will be configured during installation)

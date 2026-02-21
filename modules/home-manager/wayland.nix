@@ -56,4 +56,8 @@
     source = ../../config/sway;
     recursive = true;
   };
+  xdg.configFile."hypr" = {
+    source = ../../config/hyprland;
+    recursive = true;
+  };
 }

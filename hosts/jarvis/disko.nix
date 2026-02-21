@@ -76,6 +76,7 @@
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
+                      "discard=async"
                     ];
                   };
 
@@ -85,6 +86,7 @@
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
+                      "discard=async"
                     ];
                   };
 
@@ -94,6 +96,7 @@
                     mountOptions = [
                       "noatime"
                       "nodatacow"
+                      "discard=async"
                     ];
                   };
 
@@ -103,6 +106,7 @@
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
+                      "discard=async"
                     ];
                   };
 
@@ -112,6 +116,7 @@
                     mountOptions = [
                       "noatime"
                       "nodatacow"
+                      "discard=async"
                     ];
                   };
 
@@ -121,6 +126,7 @@
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
+                      "discard=async"
                     ];
                   };
                 };
@@ -155,15 +161,18 @@
                     mountOptions = [
                       "noatime"
                       "compress=zstd"
+                      "discard=async"
                     ];
                   };
 
-                  # Games storage
+                  # Games storage - nodatacow disables CoW to prevent
+                  # fragmentation and write amplification on large game files
                   "@games" = {
                     mountpoint = "/mnt/games";
                     mountOptions = [
                       "noatime"
                       "nodatacow"
+                      "discard=async"
                     ];
                   };
 
@@ -173,6 +182,7 @@
                     mountOptions = [
                       "noatime"
                       "compress=zstd"
+                      "discard=async"
                     ];
                   };
 
@@ -182,6 +192,7 @@
                     mountOptions = [
                       "noatime"
                       "compress=zstd"
+                      "discard=async"
                     ];
                   };
                 };

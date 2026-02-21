@@ -18,10 +18,15 @@
     extraPortals = [
       pkgs.xdg-desktop-portal-wlr
       pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
     ];
     # Modern XDG portal configuration format
     config.common.default = [
       "wlr"
+      "gtk"
+    ];
+    config.hyprland.default = [
+      "hyprland"
       "gtk"
     ];
   };

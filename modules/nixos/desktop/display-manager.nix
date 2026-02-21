@@ -8,21 +8,10 @@ let
   cfg = import ../../../config.nix;
 in
 {
-  # greetd Display Manager Configuration
-  # Minimal, fast greeter with regreet (GTK4 GUI)
-  # Perfect for Wayland compositors and multi-monitor setups
+  # greetd + regreet Display Manager Configuration
+  # programs.regreet automatically configures greetd to launch regreet
+  # inside cage (a minimal Wayland kiosk compositor)
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.regreet}/bin/regreet";
-        user = "greeter";
-      };
-    };
-  };
-
-  # Enable regreet (GTK4 greeter for greetd)
   programs.regreet = {
     enable = true;
     settings = {
@@ -33,10 +22,10 @@ in
       # };
       GTK = {
         application_prefer_dark_theme = true;
-        cursor_theme_name = "Bibata-Modern-Ice";
-        font_name = "Inter 11";
-        icon_theme_name = "Papirus-Dark";
-        theme_name = "Adwaita-dark";
+        cursor_theme_name = lib.mkForce "Bibata-Modern-Ice";
+        font_name = lib.mkForce "Inter 11";
+        icon_theme_name = lib.mkForce "Papirus-Dark";
+        theme_name = lib.mkForce "Adwaita-dark";
       };
       appearance = {
         greeting_msg = "Welcome back!";
@@ -44,8 +33,11 @@ in
     };
   };
 
-  # Ensure niri and other Wayland sessions are available
-  services.displayManager.sessionPackages = [ pkgs.niri ];
+  # Ensure Wayland sessions are available in the greeter
+  services.displayManager.sessionPackages = [
+    pkgs.niri
+    pkgs.hyprland
+  ];
 
   # Install cursor theme and icons for regreet
   environment.systemPackages = with pkgs; [

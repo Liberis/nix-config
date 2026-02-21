@@ -12,4 +12,7 @@
 
   # Niri compositor (scrolling tiling Wayland compositor)
   programs.niri.enable = true;
+
+  # Hyprland compositor (dynamic tiling Wayland compositor)
+  programs.hyprland.enable = true;
 }
