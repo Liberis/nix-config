@@ -70,11 +70,6 @@
     authorizedKeys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKAZyRyuXGBHgFOG8zv72GKxs5ZexZeW/T+3IXjclAOo democratic-csi"
     ];
-    allowedDatasets = [ "tank/*" ];
-    allowedPaths = [
-      "/tank"
-      "/var/lib/democratic-csi"
-    ];
   };
 
   # Hardware modules (Lenovo P510 ThinkStation)

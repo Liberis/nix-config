@@ -20,6 +20,7 @@ in
       kubernetes-helm
       kubernetes-helmPlugins.helm-diff
       helmfile
+      fluxcd
       k9s
       podman
       crun
