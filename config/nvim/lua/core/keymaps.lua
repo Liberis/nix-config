@@ -39,11 +39,6 @@ wk.add({
     -----------------------------------------------------------------------
     { "<leader>t", group = "Tree-sitter" },
     { "<leader>th", "<cmd>TSBufToggle highlight<CR>", desc = "Toggle Highlighting" },
-    { "<leader>ti", group = "Incremental Selection" },
-    { "<leader>tin", "gnn", desc = "Start Selection" },
-    { "<leader>tii", "grn", desc = "Expand Selection" },
-    { "<leader>tiz", "grc", desc = "Scope Increment" },
-    { "<leader>tid", "grm", desc = "Shrink Selection" },
     { "<leader>td", group = "TS Debugging" },
     { "<leader>tds", "<cmd>InspectTree<CR>", desc = "Inspect Tree" },
     { "<leader>tdh", "<cmd>Inspect<CR>", desc = "Inspect Highlights" },

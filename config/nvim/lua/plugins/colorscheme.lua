@@ -5,20 +5,28 @@ return {
         config = function()
             require("nightfox").setup({
                 options = {
-                    transparent = true, -- Enable transparency
-                    terminal_colors = true, -- Set terminal colors
-                }
+                    transparent = true,
+                    terminal_colors = true,
+                },
+                groups = {
+                    carbonfox = {
+                        -- Fix separators being invisible with transparency
+                        WinSeparator = { fg = "#353535" },
+                        -- Fix statusline/command area border
+                        StatusLine = { bg = "NONE" },
+                        StatusLineNC = { bg = "NONE" },
+                    },
+                },
             })
-            vim.cmd("colorscheme carbonfox") -- Set carbonfox as the colorscheme
+            vim.cmd("colorscheme carbonfox")
         end
     },
 
     {
         "echasnovski/mini.icons",
-        version = "*", -- Always get the latest stable version
+        version = "*",
         config = function()
             require("mini.icons").setup({})
         end
     }
 }
-
