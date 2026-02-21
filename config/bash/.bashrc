@@ -7,9 +7,13 @@ export PATH="$FLAKE_DIR/scripts:$PATH"
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Auto-start tmux: attach to existing session or create a new one
+# Auto-start tmux: grouped sessions share windows but each terminal navigates independently
 if [ -z "$TMUX" ] && command -v tmux &>/dev/null; then
-    exec tmux new-session -A -s main
+    if tmux has-session -t main 2>/dev/null; then
+        exec tmux new-session -t main
+    else
+        exec tmux new-session -s main
+    fi
 fi
 
 # History settings
