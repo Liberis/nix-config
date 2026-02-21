@@ -1,9 +1,9 @@
 return {
     "stevearc/aerial.nvim",
-    requires = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
     config = function()
         require("aerial").setup({
-            backends = { "lsp", "treesitter", "markdown" },   
+            backends = { "lsp", "treesitter", "markdown" },
             open_automatic = true,
             layout = {
                 max_width = { 40, 0.2 },  -- Sidebar width (40 columns or 20% of window)
@@ -25,6 +25,6 @@ return {
                 nested_top = "│  ",
                 whitespace = "   ",
             },
-        })    
-end
+        })
+    end
 }

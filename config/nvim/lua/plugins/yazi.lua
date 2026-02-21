@@ -1,10 +1,10 @@
-return
-{
+return {
     "mikavilpas/yazi.nvim",
+    cmd = { "Yazi", "YaziPicker" },
     config = function()
         require("yazi").setup({
-            open_for_directories = true, -- Open Yazi when opening a directory
-            floating_window = false,      -- Open in a floating window
-        })  end
-    }
-
+            open_for_directories = true,
+            floating_window = false,
+        })
+    end
+}

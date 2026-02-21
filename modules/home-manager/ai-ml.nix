@@ -9,6 +9,7 @@
     # AI/LLM tools
     lmstudio # Local LLM inference UI
     antigravity
+    gemini-cli
     opencode
   ];
 }

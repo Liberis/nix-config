@@ -8,11 +8,12 @@
   programs.firefox.enable = true;
   programs.chromium.enable = true;
   # River compositor (Wayland window manager)
-  programs.river-classic.enable = true;
+  programs.river.enable = true;
 
   # Niri compositor (scrolling tiling Wayland compositor)
   programs.niri.enable = true;
 
   # Hyprland compositor (dynamic tiling Wayland compositor)
   programs.hyprland.enable = true;
+
 }

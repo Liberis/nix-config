@@ -6,4 +6,7 @@
   services.dbus.enable = true;
   security.polkit.enable = true;
   services.printing.enable = false;
+
+  # Compatibility layer for dynamically linked binaries (e.g. Mason in Neovim)
+  programs.nix-ld.enable = true;
 }

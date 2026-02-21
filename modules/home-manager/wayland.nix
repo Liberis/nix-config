@@ -11,7 +11,7 @@
     wofi # Application launcher
     foot # Terminal emulator
     wl-clipboard # Clipboard utilities
-    wideriver # River layout generator
+#    wideriver # River layout generator
     way-displays # Display configuration tool
     wlr-randr # Output management tool
     bibata-cursors # Cursor theme
@@ -44,10 +44,10 @@
     source = ../../config/foot;
     recursive = true;
   };
-  xdg.configFile."river" = {
-    source = ../../config/river;
-    recursive = true;
-  };
+  # xdg.configFile."river" = {
+  #   source = ../../config/river;
+  #   recursive = true;
+  # };
   xdg.configFile."niri" = {
     source = ../../config/niri;
     recursive = true;

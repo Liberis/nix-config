@@ -1,4 +1,4 @@
-vim.g.start_time = vim.loop.hrtime()  -- Capture startup time at the beginning
+vim.g.start_time = vim.uv.hrtime()  -- Capture startup time at the beginning
 
 return {
     "goolord/alpha-nvim",
@@ -23,8 +23,8 @@ return {
             "⠀⠀⠀⠀⠀⠀⣼⣿⣿⠃⠀⣠⣿⣿⣿⣿⣿⣃⣀⣀⣤⣤⣤⣤⣤⠤⠶⠶⠶⠶⠶⠶⠶⠶⠶⠶⠤⣤⣤⣤⣤⣤⣈⣿⣿⣿⣿⣿⣆⠀⠈⢿⣿⣷⠀⠀⠀⠀⠀⠀",
             "⠀⠀⠀⠀⠀⢸⣿⣿⠇⠀⢠⣿⣿⣿⣿⡿⠛⠉⠉⠉⠀⠀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠉⠉⢻⣿⣿⣿⣿⣆⠀⠈⢿⣿⣧⠀⠀⠀⠀⠀",
             "⠀⠀⠀⠀⠀⣿⣿⡏⠀⢠⣿⣿⣿⣿⣿⠷⠶⠞⠛⠛⠛⠋⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠾⠿⠿⣿⣿⣿⣆⡀⠘⣿⣿⡄⠀⠀⠀⠀",
-            "⠀⠀⠀⠀⢸⣿⣿⡷⠾⠛⠋⠉⠁⠀⢀⣠⣤⣶⡶⠶⠾⠟⠛⠛⠛⠛⠛⠛⠉⠉⠙⠛⠛⠛⠛⠛⠛⠛⠛⠛⠻⠿⠷⠶⢶⣤⠀⠀⠀⠉⠉⠛⠻⠿⣿⣧⠀⠀⠀⠀",
-            "⠀⠀⠀⠀⢸⣿⣥⣤⣤⣀⣀⣀⣀⣰⣿⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣧⣀⣤⣤⣤⣤⠴⢶⣾⣿⠀⠀⠀⠀",
+            "⠀⠀⠀⠀⢸⣿⣿⡷⠾⠛⠋⠉⠁⠀⢀⣠⣤⣶⡶⠶⠾⠟⠛⠛⠛⠛⠛⠛⠉⠉⠙⠛⠛⠛⠛⠛⠛⠛⠛⠻⠿⠷⠶⢶⣤⠀⠀⠀⠉⠉⠛⠻⠿⣿⣿⣧⠀⠀⠀⠀",
+            "⠀⠀⠀⠀⢸⣿⣥⣤⣤⣀⣀⣀⣀⣰⣿⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣧⣀⣤⣤⣤⣤⠴⢶⣾⣿⠀⠀⠀⠀",
             "⠀⠀⠀⠀⣼⣿⡇⠀⢹⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣠⣴⣾⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⣸⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⠀⠀⠀⠀",
             "⠀⠀⠀⠀⣿⣿⡇⠀⢸⣿⣿⣿⣿⣿⣿⡄⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⣿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⠀⠀⠀⠀",
             "⠀⠀⠀⠀⢸⣿⣿⠀⠈⣿⣿⣿⣿⣿⣿⣧⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⢰⣿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⠀⠀⠀⠀",
@@ -40,7 +40,7 @@ return {
             "⢸⣿⠀⠀⠀⠀⠀⠀⠀⣴⣿⠟⠁⠀⠀⠈⠛⢿⣿⣿⣷⣦⣤⣀⣻⣦⣄⡀⠀⠀⠀⠀⠀⢀⣠⣴⣏⣠⣴⣶⣿⣿⡿⠟⠋⠀⠀⠀⠈⢻⣿⠆⠀⠀⠀⠀⠀⠀⣽⡿",
             "⠈⢿⣷⣦⣤⡆⠀⠀⠀⢸⣿⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿⣿⣿⠿⠟⠋⠁⠀⠀⠀⠀⠀⠀⢠⣿⡏⠀⠀⠀⠀⣶⣶⣾⠿⠃",
             "⠀⠀⠈⠙⣿⣇⠀⠀⣀⣾⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠛⠛⠛⠛⠛⠛⠛⠛⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣄⠀⠀⣠⣿⡏⠀⠀⠀",
-            "⠀⠀⠀⠀⠈⠻⠿⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠿⠿⠿⠋⠀⠀⠀⠀", 
+            "⠀⠀⠀⠀⠈⠻⠿⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠿⠿⠿⠋⠀⠀⠀⠀",
             "                      Welcome to Neovim                     ",
         }
 
@@ -48,12 +48,13 @@ return {
         dashboard.section.buttons.val = {
             dashboard.button("r", "Recent Files", ":Telescope oldfiles<CR>"),
             dashboard.button("f", "Find File", ":Telescope find_files<CR>"),
-            dashboard.button("s", "Load Session", ":source ~/.config/nvim/session.vim<CR>"),
+            dashboard.button("s", "Load Session", ":lua require('persistence').load()<CR>"),
+            dashboard.button("p", "Projects", ":Telescope projects<CR>"),
             dashboard.button("c", "Nvim Config", ":e ~/.config/nvim/init.lua<CR>"),
             dashboard.button("q", "Quit Neovim", ":qa<CR>"),
         }
         -- Calculate Startup Time
-        local startup_time = (vim.loop.hrtime() - vim.g.start_time) / 1e6  -- Convert to milliseconds
+        local startup_time = (vim.uv.hrtime() - vim.g.start_time) / 1e6  -- Convert to milliseconds
 
         -- Get Number of Loaded Plugins (for lazy.nvim)
         local plugin_count = 0
@@ -62,12 +63,10 @@ return {
         end
 
         -- Footer with Startup Time and Plugin Count
-        dashboard.section.footer.val = { 
+        dashboard.section.footer.val = {
             "Loaded in " .. string.format("%.2f", startup_time) .. " ms " .. plugin_count .. " plugins"}
-        -- Footer
 
         -- Set up Alpha dashboard
         alpha.setup(dashboard.opts)
     end,
 }
-
