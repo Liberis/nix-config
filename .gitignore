@@ -2,6 +2,9 @@
 .claude/
 **/.claude/
 
+# Aider files
+.aider*
+
 # Build results
 result
 result-*
