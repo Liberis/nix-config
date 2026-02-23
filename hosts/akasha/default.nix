@@ -43,7 +43,6 @@
     ../../modules/nixos/services/ssh.nix
     ../../modules/nixos/services/k3s-agent.nix
     ../../modules/nixos/services/nfs.nix
-    ../../modules/nixos/services/democratic-csi.nix
   ];
 
   # Boot loader (GRUB for existing installation)
