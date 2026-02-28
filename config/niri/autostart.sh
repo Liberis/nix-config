@@ -3,14 +3,11 @@
 # NIRI AUTOSTART SCRIPT
 # ============================================
 
-# ENVIRONMENT & DBUS
+# WAYLAND ENVIRONMENT
 # ============================================
-dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
-
-# Wait for XDG desktop portal to be ready
-# This prevents waybar portal timeout errors
-sleep 1
+# Export Wayland vars to dbus/systemd immediately (these are ready now)
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY NIRI_SOCKET XDG_CURRENT_DESKTOP
+systemctl --user import-environment WAYLAND_DISPLAY NIRI_SOCKET XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
 
 # XWAYLAND SUPPORT
 # ============================================
@@ -18,8 +15,15 @@ sleep 1
 pkill -x xwayland-satellite 2>/dev/null || true
 sleep 0.2
 xwayland-satellite :0 &
-# Wait for xwayland-satellite to be ready
-sleep 1
+
+# Wait for the X11 socket to appear before exporting DISPLAY
+i=0; while [ ! -e /tmp/.X11-unix/X0 ] && [ "$i" -lt 50 ]; do
+    sleep 0.1; i=$((i + 1))
+done
+
+# Now export DISPLAY — the X server is actually accepting connections
+dbus-update-activation-environment --systemd DISPLAY
+systemctl --user import-environment DISPLAY
 
 # DISPLAY MANAGEMENT
 # ============================================

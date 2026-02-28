@@ -13,7 +13,7 @@
     curl # HTTP client
     wget # Download utility
     bind # DNS utilities (dig, nslookup)
-
+    tcpdump
     # Hardware information
     pciutils # lspci
     usbutils # lsusb

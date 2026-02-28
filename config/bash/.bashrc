@@ -16,6 +16,13 @@ if [ -z "$TMUX" ] && command -v tmux &>/dev/null; then
     fi
 fi
 
+# Inside tmux: refresh Wayland env vars from the session (handles niri restarts)
+if [ -n "$TMUX" ]; then
+    eval "$(tmux show-environment -s WAYLAND_DISPLAY 2>/dev/null)"
+    eval "$(tmux show-environment -s NIRI_SOCKET 2>/dev/null)"
+    eval "$(tmux show-environment -s DISPLAY 2>/dev/null)"
+fi
+
 # History settings
 export HISTSIZE=10000
 export HISTFILESIZE=20000
