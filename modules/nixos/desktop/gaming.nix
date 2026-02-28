@@ -58,8 +58,9 @@
     STEAM_FORCE_DESKTOPUI_SCALING = "1.25"; # Match your AW2724DM scaling
     # Enable MangoHud for all Vulkan games
     MANGOHUD = "1";
-    # NVIDIA-specific optimizations
-    __GL_GSYNC_ALLOWED = "1";
-    __GL_VRR_ALLOWED = "1";
+    # VRR/G-Sync disabled globally — causes flickering with mixed-refresh monitors
+    # Enable per-game via Steam launch options: __GL_GSYNC_ALLOWED=1 __GL_VRR_ALLOWED=1 %command%
+    __GL_GSYNC_ALLOWED = "0";
+    __GL_VRR_ALLOWED = "0";
   };
 }
