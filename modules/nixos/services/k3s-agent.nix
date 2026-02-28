@@ -40,9 +40,14 @@ in
     # Firewall
     networking.firewall = {
       allowedTCPPorts = [
+        2222
+        9100  # Node exporter (Prometheus metrics)
+        7946  # Cluster gossip/membership
         10250 # Kubelet metrics
+        
       ];
       allowedUDPPorts = [
+        7946  # Cluster gossip/membership
         8472  # Flannel VXLAN
       ];
       trustedInterfaces = [ "cni0" "flannel.1" ];

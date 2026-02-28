@@ -53,6 +53,7 @@ in
     # Firewall
     networking.firewall = {
       allowedTCPPorts = [
+        2222
         6443  # K3s API server
         10250 # Kubelet metrics
       ];
