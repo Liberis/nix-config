@@ -58,7 +58,7 @@
     role = "server";
     clusterInit = true;
     tlsSans = [
-      "192.168.10.10"
+      "192.168.10.11"
       "mainframe.local"
       "mainframe"
     ];
